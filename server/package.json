@@ -1,0 +1,33 @@
+{
+  "name": "server",
+  "version": "0.1.0",
+  "description": "Server for real time chat",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"nodemon ./server.js --exec babel-node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/czarekowyxjs/real-time-chat.git"
+  },
+  "author": "Cezary Góralski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/czarekowyxjs/real-time-chat/issues"
+  },
+  "homepage": "https://github.com/czarekowyxjs/real-time-chat#readme",
+  "dependencies": {
+    "bookshelf": "^0.13.3",
+    "knex": "^0.15.1",
+    "mysql": "^2.15.0",
+    "restify": "^7.2.1",
+    "socket.io": "^2.1.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "nodemon": "^1.18.2"
+  }
+}
