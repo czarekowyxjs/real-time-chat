@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"nodemon ./server.js --exec babel-node"
+    "start": "nodemon ./server.js --exec babel-node"
   },
   "repository": {
     "type": "git",
@@ -18,10 +18,9 @@
   },
   "homepage": "https://github.com/czarekowyxjs/real-time-chat#readme",
   "dependencies": {
-    "bookshelf": "^0.13.3",
-    "knex": "^0.15.1",
-    "mysql": "^2.15.0",
+    "mysql2": "^1.5.3",
     "restify": "^7.2.1",
+    "sequelize": "^4.38.0",
     "socket.io": "^2.1.1"
   },
   "devDependencies": {
