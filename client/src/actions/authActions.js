@@ -33,8 +33,16 @@ export const verifyToken = (socket, token) => {
 	});
 };
 
-export const verifyTokenSuccess = user => {
-	return dispatch => {
-		console.log(user);
-	}
+export const verifyTokenSuccess = data => {
+	return dispatch => dispatch({
+			type: "VERIFY_TOKEN_SUCCESS",
+			user: data.user
+		});
+};
+
+export const verifyTokenError = error => {
+	return dispatch => dispatch({
+		type: "VERIFY_TOKEN_ERROR",
+		error: error
+	});
 };
