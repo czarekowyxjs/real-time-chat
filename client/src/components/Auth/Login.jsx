@@ -43,7 +43,9 @@ class Login extends React.Component {
 	}
 
 	render() {
-		if(this.props.auth.logged) return <Redirect to="/dashboard"/>;
+		if(this.props.auth.logged) {
+			return <Redirect to="/dashboard"/>;
+		}
 
 		return (
 			<div className="auth-form">

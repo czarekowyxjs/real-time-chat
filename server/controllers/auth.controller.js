@@ -6,6 +6,7 @@ class AuthController {
 
 		this.handleLoginReq();
 		this.handleVerifyTokenReq();
+		this.handleLogout();
 	}
 
 	handleLoginReq() {
@@ -95,6 +96,27 @@ class AuthController {
 				})
 			});
 
+		});
+	}
+
+	handleLogout() {
+		this.socket.on("logout", data => {
+			const uniqueToken = data.headers.Authorization;
+
+			this.db.Token
+			.destroy({
+				where: {
+					token: uniqueToken
+				}
+			})
+			.then(resToken => {
+				this.socket.emit("logoutSuccess", {
+					error: false
+				});
+			})
+			.catch(err => {
+				
+			});
 		});
 	}
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { verifyToken, verifyTokenSuccess, verifyTokenError } from '../actions/authActions';
+import { verifyToken, verifyTokenSuccess, verifyTokenError, toggleLoading } from '../actions/authActions';
 
 export const RequireAuth = (Component, socket) => {
 
@@ -19,10 +19,15 @@ export const RequireAuth = (Component, socket) => {
 		}
 
 		render() {
+			if(!this.props.auth.loaded) {
+				return <p>Loading...</p>;
+			}
+
 			if(this.props.auth.verifyTokenError.error) {
 				return <Redirect to="/login"/>;
 			}
-			return <Component {...this.props} />;
+
+			return <Component {...this.props} socket={socket}/>;
 		}
 	}
 
@@ -32,5 +37,17 @@ export const RequireAuth = (Component, socket) => {
 		};
 	};
 	
-	return connect(mapStateToProps, { verifyToken, verifyTokenSuccess, verifyTokenError })(RequireAuthHoC);
+	return connect(mapStateToProps, { verifyToken, verifyTokenSuccess, verifyTokenError, toggleLoading })(RequireAuthHoC);
+};
+
+export const NoRequireAuth = (Component, socket) => {
+
+	class NoRequireAuthHoC extends React.Component {
+		render() {
+			return <Component {...this.props} socket={socket}/>;
+		}
+	}
+
+	return NoRequireAuthHoC;
+
 };

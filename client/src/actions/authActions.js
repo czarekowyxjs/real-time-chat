@@ -9,7 +9,7 @@ export const loginSuccess = data => {
 		const token = data.token.token;
 		console.log(data);
 
-		localStorage.setItem("token", token);
+		window.localStorage.setItem("token", token);
 
 		dispatch({
 			type: "LOGIN",
@@ -26,11 +26,19 @@ export const loginError = data => {
 };
 
 export const verifyToken = (socket, token) => {
-	return dispatch => socket.emit("verifyToken", {
-		headers: {
-			Authorization: token
-		}
-	});
+	return dispatch => {
+
+		dispatch({
+			type: "TOGGLE_LOADING",
+			loaded: false
+		});
+
+		socket.emit("verifyToken", {
+			headers: {
+				Authorization: token
+			}
+		});
+	};
 };
 
 export const verifyTokenSuccess = data => {
@@ -45,4 +53,35 @@ export const verifyTokenError = error => {
 		type: "VERIFY_TOKEN_ERROR",
 		error: error
 	});
+};
+
+export const logout = (socket, token) => {
+	return dispatch => socket.emit("logout", {
+		headers: {
+			Authorization: token
+		}
+	});
+};
+
+export const logoutSuccess = data => {
+	return dispatch => {
+
+		window.localStorage.clear();
+
+		dispatch({
+			type: "LOGOUT"
+		});
+	};
+};
+
+export const logoutError = () => {
+	return dispatch => {
+
+	};
+};
+
+export const toggleLoading = (loading) => {
+	return dispatch => {
+		console.log('xd')
+	};
 };

@@ -2,7 +2,8 @@ const initialState = {
 	logged: false,
 	user: {},
 	loginError: {},
-	verifyTokenError: {}
+	verifyTokenError: {},
+	loaded: false
 };
 
 export default (state = initialState, action) => {
@@ -24,14 +25,23 @@ export default (state = initialState, action) => {
 				...state,
 				logged: true,
 				user: action.user,
-				verifyTokenError: {}
+				verifyTokenError: {},
+				loaded: true
 			};
 		case "VERIFY_TOKEN_ERROR":
 			return {
 				...state,
 				logged: false,
 				user: {},
-				verifyTokenError: action.error
+				verifyTokenError: action.error,
+				loaded: true
+			};
+		case "LOGOUT":
+			return initialState;
+		case "TOGGLE_LOADING":
+			return {
+				...state,
+				loaded: action.loaded
 			};
 		default:
 			return state;

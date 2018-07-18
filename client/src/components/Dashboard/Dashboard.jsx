@@ -2,7 +2,7 @@ import React from 'react';
 
 class Dashboard extends React.Component {
 	componentDidMount() {
-
+		
 	}
 	
 	render() {
