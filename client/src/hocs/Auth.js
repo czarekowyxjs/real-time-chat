@@ -1,33 +1,28 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { verifyToken, verifyTokenSuccess, verifyTokenError, toggleLoading } from '../actions/authActions';
+import { userRequireAuth, userNoRequireAuth } from '../actions/authActions';
 
-export const RequireAuth = (Component, socket) => {
+export const RequireAuth = (Component) => {
 
 	class RequireAuthHoC extends React.Component {
-		componentDidMount() {
-			socket.on("verifyTokenSuccess", this.props.verifyTokenSuccess);
-			socket.on("verifyTokenError", this.props.verifyTokenError);
-			const token = localStorage.getItem("token");
-			this.props.verifyToken(socket, token);
-		}
 
-		componentWillUnmount() {
-			socket.on("verifyTokenSuccess", this.props.verifyTokenSuccess);
-			socket.on("verifyTokenError", this.props.verifyTokenError);
+		componentDidMount() {
+			const token = localStorage.getItem("token");
+
+			this.props.userRequireAuth(token);
 		}
 
 		render() {
 			if(!this.props.auth.loaded) {
-				return <p>Loading...</p>;
-			}
+				return <p>Loading your data...</p>;
+			}	
 
-			if(this.props.auth.verifyTokenError.error) {
+			if(this.props.auth.authError.status) {
 				return <Redirect to="/login"/>;
 			}
 
-			return <Component {...this.props} socket={socket}/>;
+			return <Component {...this.props}/>;
 		}
 	}
 
@@ -37,17 +32,36 @@ export const RequireAuth = (Component, socket) => {
 		};
 	};
 	
-	return connect(mapStateToProps, { verifyToken, verifyTokenSuccess, verifyTokenError, toggleLoading })(RequireAuthHoC);
+	return connect(mapStateToProps, { userRequireAuth })(RequireAuthHoC);
 };
 
 export const NoRequireAuth = (Component, socket) => {
 
 	class NoRequireAuthHoC extends React.Component {
+		componentDidMount() {
+			const token = localStorage.getItem("token");
+			this.props.userNoRequireAuth(token);
+		}
+
 		render() {
-			return <Component {...this.props} socket={socket}/>;
+			if(!this.props.auth.loaded) {
+				return <p>Loading your data...</p>;
+			}
+
+			if(!this.props.auth.authError.status) {
+				return <Redirect to="/"/>;
+			}
+
+			return <Component {...this.props}/>;
 		}
 	}
 
-	return NoRequireAuthHoC;
+	const mapStateToProps = state => {
+		return {
+			auth: state.auth
+		};
+	};
+
+	return connect(mapStateToProps, { userNoRequireAuth })(NoRequireAuthHoC);
 
 };

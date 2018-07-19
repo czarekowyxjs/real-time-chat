@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { loginBySocket, loginSuccess, loginError } from '../../actions/authActions';
+import { authLogin, returnToInitialState } from '../../actions/loginActions';
 
 class Login extends React.Component {
 	constructor(props) {
@@ -16,24 +16,17 @@ class Login extends React.Component {
 		this.handleChange = this.handleChange.bind(this);
 	}
 
-	componentDidMount() {
-		this.props.socket.on('loginSuccess', this.props.loginSuccess);
-		this.props.socket.on('loginError', this.props.loginError);
-	}
-
 	componentWillUnmount() {
-		this.props.socket.removeListener('loginSuccess', this.props.loginSuccess);
-		this.props.socket.removeListener('loginError', this.props.loginError);		
+		this.props.returnToInitialState();
 	}
 
 	handleSubmit(e) {
 		e.preventDefault();
 
-		this.props.loginBySocket(this.props.socket, {
+		this.props.authLogin({
 			username: this.state.username,
 			password: this.state.password
 		});
-		
 	}
 
 	handleChange(e) {
@@ -43,8 +36,8 @@ class Login extends React.Component {
 	}
 
 	render() {
-		if(this.props.auth.logged) {
-			return <Redirect to="/dashboard"/>;
+		if(this.props.login.loaded) {
+			return <Redirect to="/"/>;
 		}
 
 		return (
@@ -75,8 +68,8 @@ class Login extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		auth: state.auth
+		login: state.login
 	}
 };
 
-export default connect(mapStateToProps, { loginBySocket, loginSuccess, loginError })(Login);
+export default connect(mapStateToProps, { authLogin, returnToInitialState })(Login);

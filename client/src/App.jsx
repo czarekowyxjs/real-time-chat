@@ -1,38 +1,23 @@
 import React, { Component } from 'react';
-import { Route, Switch, BrowserRouter, Link } from 'react-router-dom';
-import ioClient from 'socket.io-client';
+import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import Login from './components/Auth/Login.jsx';
 import Logout from './components/Logout/Logout.jsx';
-import Dashboard from './components/Dashboard/Dashboard.jsx';
+import AppContainer from './components/AppContainer/AppContainer.jsx';
 
 import { RequireAuth, NoRequireAuth } from './hocs/Auth';
 
-let socket;
+import "./App.css";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-
-    socket = ioClient("http://localhost:8000");
-
-  }
-  
   render() {
     return (
-      <div className="App">
+      <div id="app">
         <BrowserRouter>
-          <div>
-          <div>
-            <Link to="/login">Login</Link>
-            <Link to="/dashboard">Dashboard</Link>
-            <Link to="/logout">Logout</Link>
-          </div>
           <Switch>
-            <Route path="/login" component={NoRequireAuth(Login, socket)}/>
-            <Route path="/dashboard" component={RequireAuth(Dashboard, socket)}/>
-            <Route path="/logout" component={RequireAuth(Logout, socket)}/>
+            <Route path="/login" component={NoRequireAuth(Login)}/>
+            <Route path="/logout" component={RequireAuth(Logout)}/>
+            <Route path="/" component={RequireAuth(AppContainer)}/>
           </Switch>
-          </div>
         </BrowserRouter>
       </div>
     );

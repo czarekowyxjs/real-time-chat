@@ -1,5 +1,5 @@
 export default {
-	port: process.env.PORT || 8000,
+	port: process.env.PORT || 3001,
 	db: {
 		database: 'real-time-chat' || process.env.DB_NAME,
 		user: 'root' || process.env.DB_USER,

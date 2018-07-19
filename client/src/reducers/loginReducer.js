@@ -1,27 +1,27 @@
 const initialState = {
-	loaded: false,
-	authError: {
-		status: false
-	}
+	logged: false,
+	loginError: {},
+	loaded: false
 };
 
 export default (state = initialState, action) => {
 	switch(action.type) {
-		case "AUTH_BEGIN":
+		case "LOGIN_BEGIN":
 			return initialState;
-		case "AUTHORIZATION":
+		case "LOGIN":
 			return {
 				...state,
-				loaded: true,
-				authError: {}
+				loginError: {},
+				logged: true,
+				loaded: true
 			};
-		case "AUTH_ERROR":
+		case "LOGIN_ERROR":
 			return {
 				...state,
-				authError: action.error,
+				loginError: action.error,
 				loaded: true
 			};
 		default:
 			return state;
 	}
-};
+}

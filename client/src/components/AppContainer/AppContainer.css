@@ -1,0 +1,16 @@
+#root-app {
+	width:100%;
+	display:flex;
+	flex-direction:row;
+}
+
+#root-app-header {
+	width:30%;
+	max-width:240px;
+	height:100vh;
+}
+
+#root-app-body {
+	width:100%;
+	height:auto;
+}

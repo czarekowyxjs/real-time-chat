@@ -1,87 +1,82 @@
-export const loginBySocket = (socket, user) => {
-	return dispatch => socket.emit('login', user);
-};
+import axios from 'axios';
 
-export const loginSuccess = data => {
-	return dispatch => {
-		
-		const user = data.user;
-		const token = data.token.token;
-		console.log(data);
-
-		window.localStorage.setItem("token", token);
-
+export const userRequireAuth = (token) => {
+	return async dispatch => {
 		dispatch({
-			type: "LOGIN",
-			user: user
+			type: "AUTH_BEGIN"
 		});
+		try {
 
-	};
-};
+			const response = await axios.get("/api/auth/authorization?t="+token);
 
-export const loginError = data => {
-	return dispatch => {
-		console.log(data);
-	};
-};
+			if(response.status === 203) {
 
-export const verifyToken = (socket, token) => {
-	return dispatch => {
+				dispatch({
+					type: "AUTH_ERROR",
+					error: response.data.error
+				});
 
-		dispatch({
-			type: "TOGGLE_LOADING",
-			loaded: false
-		});
+			} else if(response.status === 200) {
 
-		socket.emit("verifyToken", {
-			headers: {
-				Authorization: token
+				dispatch({
+					type: "FETCH_USER_DATA",
+					user: response.data.user
+				});
+
+				dispatch({
+					type: "AUTHORIZATION"
+				});
+
 			}
-		});
-	};
-};
 
-export const verifyTokenSuccess = data => {
-	return dispatch => dispatch({
-			type: "VERIFY_TOKEN_SUCCESS",
-			user: data.user
-		});
-};
 
-export const verifyTokenError = error => {
-	return dispatch => dispatch({
-		type: "VERIFY_TOKEN_ERROR",
-		error: error
-	});
-};
+		} catch(e) {
 
-export const logout = (socket, token) => {
-	return dispatch => socket.emit("logout", {
-		headers: {
-			Authorization: token
+			dispatch({
+				type: "AUTH_ERROR",
+				error: e.response.data.error
+			});
+
 		}
-	});
+	};
 };
 
-export const logoutSuccess = data => {
-	return dispatch => {
-
-		window.localStorage.clear();
-
+export const userNoRequireAuth = (token) => {
+	return async dispatch => {
 		dispatch({
-			type: "LOGOUT"
+			type: "AUTH_BEGIN"
 		});
-	};
-};
+		try {
 
-export const logoutError = () => {
-	return dispatch => {
+			const response = await axios.get("/api/auth/authorization?t="+token);
 
-	};
-};
+			if(response.status === 203) {
 
-export const toggleLoading = (loading) => {
-	return dispatch => {
-		console.log('xd')
+				dispatch({
+					type: "AUTH_ERROR",
+					error: response.data.error
+				});
+
+			} else if(response.status === 200) {
+
+				dispatch({
+					type: "FETCH_USER_DATA",
+					user: response.data.user
+				});
+
+				dispatch({
+					type: "AUTHORIZATION"
+				});
+
+			}
+
+		} catch(e) {
+
+			dispatch({
+				type: "AUTH_ERROR",
+				error: e.response.data.error
+			});
+
+		}
 	};
 };

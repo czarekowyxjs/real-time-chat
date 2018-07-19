@@ -1,37 +1,34 @@
 // modules
-import restify from 'restify';
-import socket_io from 'socket.io';
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
 
 // import configuration
 import config from './config/server.conf';
 
+// custom error
+import CustomError from './helpers/CustomError';
+
+// controllers with routes
+
 // db models
 import db from './models';
 
-// import classes of controllers for socket.io
+// routes and controllers
 import AuthController from './controllers/auth.controller';
 
-// it will be instances of socket.io controllers
-let authController;
-
 // init server
-const server = restify.createServer({
-	name: "Api for real time chat"
-});
+const server = express();
 
 // middlewares
-server.use(restify.plugins.bodyParser());
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: true }));
+server.use(cors());
 
-// socket.io server
-const io = socket_io(server.server);
+// apply controllers and routes
+server.use("/api/auth", AuthController);
 
-io.sockets.on("connection", socket => {
-
-	console.log(socket.id);
-
-	authController = new AuthController(socket, db);
-
-});
+// serve static files
 
 
 // start server

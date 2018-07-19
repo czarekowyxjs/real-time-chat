@@ -1,124 +1,127 @@
-class AuthController {
-	constructor(socket, db) {
-		this.socket = socket;
+import { Router } from 'express';
+import CustomError from '../helpers/CustomError';
+import db from '../models';
 
-		this.db = db;
+const router = new Router();
 
-		this.handleLoginReq();
-		this.handleVerifyTokenReq();
-		this.handleLogout();
-	}
+router.route('/login')
+.get((req, res) => {
+	const username = req.body.user.username;
+	const password = req.body.user.password;
 
-	handleLoginReq() {
+	db.User
+	.findOne({
+		attributes: {
+			exclude: ['password']
+		},
+		where: {
+			username: username,
+			password: password
+		}
+	})
+	.then(resUser => {
 
-		this.socket.on('login', user => {
-			this.db.User
-			.findOne({
-				where: user,
-				attributes: {
-					exclude: ['password']
-				}
-			})
-			.then(resUser => {
+		if(resUser) {
 
-				if(resUser) {
-
-					this.db.Token
-					.create({
-						uid: resUser.uid
-					})
-					.then(resToken => {
-
-						this.socket.emit('loginSuccess', {
-							user: resUser,
-							token: resToken
-						});
-
-					})
-					.catch(err => {
-						this.socket.emit('loginError', {
-							error: true,
-							message: 'Server error, please try again'
-						});
-					});
-
-				} else {
-					this.socket.emit('loginError', {
-						error: true,
-						message: 'Invalid username or password'
-					});
-				}
-
-			})
-			.catch(err => {
-				this.socket.emit('loginError', {
-					error: true,
-					message: 'Server error, please try again'
-				});
-			});
-		});
-	}
-
-	handleVerifyTokenReq() {
-		this.socket.on('verifyToken', data => {
-			const reqToken = data.headers.Authorization;
-
-			this.db.User
-			.findOne({
-				attributes: {
-					exclude: ['password']
-				},
-				include: [{
-					model: this.db.Token,
-					where: {
-						token: reqToken
-					}
-				}]
-			})
-			.then(resUser => {
-				
-				if(resUser) {
-					this.socket.emit("verifyTokenSuccess", {
-						user: resUser
-					});
-				} else {
-					this.socket.emit("verifyTokenError", {
-						error: true,
-						message: "Invalid token"
-					});
-				}
-
-			})
-			.catch(err => {
-				this.socket.emit("verifyTokenError", {
-					error: true,
-					message: 'Server error, please try again'
-				})
-			});
-
-		});
-	}
-
-	handleLogout() {
-		this.socket.on("logout", data => {
-			const uniqueToken = data.headers.Authorization;
-
-			this.db.Token
-			.destroy({
-				where: {
-					token: uniqueToken
-				}
+			db.Token
+			.create({
+				uid: resUser.uid
 			})
 			.then(resToken => {
-				this.socket.emit("logoutSuccess", {
-					error: false
-				});
+				res.status(200);
+				res.send({
+					user: resUser,
+					token: resToken
+				});					
 			})
 			.catch(err => {
-				
+				const error = new CustomError(500, "Invalid username or password", req);
+				res.status(500);
+				res.send({
+					error
+				});
 			});
-		});
-	}
-}
 
-export default AuthController;
+		} else {
+			const error = new CustomError(404, "Invalid username or password", req);
+			res.status(404);
+			res.send({
+				error
+			});
+		}
+
+	})
+	.catch(err => {
+		const error = new CustomError(500, "Server error, please try again", req);
+		res.status(500);
+		res.send({
+			error
+		});
+	});
+});
+
+router.route("/logout")
+.post((req, res) => {
+	const token = req.body.token;
+
+	db.Token
+	.destroy({
+		where: {
+			token: token
+		}
+	})
+	.then(resToken => {
+		res.status(202);
+		res.send({
+			error: false
+		});
+	})
+	.catch(err => {
+
+	});
+});
+
+router.route("/authorization")
+.get((req, res) => {
+	const token = req.query.t;
+
+	db.User
+	.findOne({
+		attributes: {
+			exclude: ['password']
+		},
+		include: [{
+			model: db.Token,
+			where: {
+				token: token
+			}
+		}]
+	})
+	.then(resUser => {
+
+		if(resUser) {
+
+			res.status(200);
+			res.send({
+				user: resUser
+			});
+
+		} else {
+			const error = new CustomError(203, "Peromission denied", req);
+			res.status(203);
+			res.send({
+				error: error
+			});				
+		}
+
+	})
+	.catch(err => {
+		const error = new CustomError(500, "Server error, please try again", req);
+		res.status(500);
+		res.send({
+			error: error
+		});
+	});
+});
+
+export default router;

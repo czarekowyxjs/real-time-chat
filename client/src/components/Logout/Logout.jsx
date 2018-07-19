@@ -1,34 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { logout, logoutSuccess } from '../../actions/authActions';
+import { executeLogout } from '../../actions/logoutActions';
 
 class Logout extends React.Component {
 	componentDidMount() {
-		console.log('Logout - DidMount');
 		const token = localStorage.getItem("token");
-
-		this.props.socket.on("logoutSuccess", this.props.logoutSuccess);
-		this.props.logout(this.props.socket, token);
-	}
-
-	componentWillUnmount() {
-		this.props.socket.removeListener("logoutSuccess", this.props.logoutSuccess);
+		this.props.executeLogout(token);
 	}
 
 	render() {
-		if(!this.props.auth.logged) {
+		if(this.props.logout.loaded) {
 			return <Redirect to="/login"/>;
 		}
-
 		return null;
 	}
 }
 
 const mapStateToProps = state => {
 	return {
-		auth: state.auth
+		auth: state.auth,
+		logout: state.logout,
+		user: state.user
 	};
 };
 
-export default connect(mapStateToProps, { logout, logoutSuccess })(Logout);
+export default connect(mapStateToProps, { executeLogout })(Logout);
