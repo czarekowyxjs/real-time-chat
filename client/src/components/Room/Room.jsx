@@ -22,6 +22,7 @@ class Room extends React.Component {
 		this.verifyRoom = this.verifyRoom.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.renderMessages = this.renderMessages.bind(this);
+		this.leaveRoom = this.leaveRoom.bind(this);
 	}
 
 	componentWillUnmount() {
@@ -31,6 +32,10 @@ class Room extends React.Component {
 
 	componentDidMount() {
 		this.verifyRoom();
+	}
+
+	leaveRoom() {
+		this.props.history.replace("/join");
 	}
 
 	verifyRoom() {
@@ -98,7 +103,11 @@ class Room extends React.Component {
 					</div>
 				</div>
 				<div className="room-root-aside">
-
+					<div className="room-aside-leave">
+						<button onClick={this.leaveRoom}>
+							Leave room
+						</button>
+					</div>
 				</div>
 			</div>
 		);	
