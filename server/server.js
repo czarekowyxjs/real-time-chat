@@ -37,11 +37,9 @@ app.use("/public", express.static(__dirname+"/public"));
 const server = http.createServer(app);
 
 // socket server
-const io = socket_io(server);
+const io = socket_io.listen(server);
 
-let users = [];
-
-io.sockets.on("connection", socket => {
+io.on("connection", socket => {
 	
 	socket.on('joinToRoom', data => {
 
@@ -60,7 +58,11 @@ io.sockets.on("connection", socket => {
 				},
 				order: [
 					['_createdAt', 'DESC']
-				]
+				],
+				include: [{
+					model: db.User,
+					attributes: ['uid', 'username', "avatar"]
+				}]
 			})
 			.then(resRoomUserOnlineAll => {
 
@@ -80,8 +82,7 @@ io.sockets.on("connection", socket => {
 		});
 	});
 
-	socket.on("leaveRoom", () => {
-		console.log('xd');
+	socket.on("disconnect", () => {
 		db.RoomUserOnline
 		.findOne({
 			where: {
@@ -89,9 +90,7 @@ io.sockets.on("connection", socket => {
 			}
 		})
 		.then(resOnlineUser => {
-			console.log(resOnlineUser);
 			if(resOnlineUser) {
-
 				db.RoomUserOnline
 				.destroy({
 					where: {
@@ -99,7 +98,6 @@ io.sockets.on("connection", socket => {
 					}
 				})
 				.then(resRoomUserOnline => {
-
 					db.RoomUserOnline
 					.findAll({
 						where: {
@@ -107,7 +105,11 @@ io.sockets.on("connection", socket => {
 						},
 						order: [
 							['_createdAt', 'DESC']
-						]
+						],
+						include: [{
+							model: db.User,
+							attributes: ['uid', 'username', "avatar"]
+						}]
 					})
 					.then(resRoomUserOnlineAll => {
 						
@@ -120,21 +122,16 @@ io.sockets.on("connection", socket => {
 					.catch(err => {
 
 					});
-
 				})
 				.catch(err => {
 
 				});				
-
 			}
-
 		})
 		.catch(err => {
 
 		});
-
 	});
-
 });
 
 // start server
