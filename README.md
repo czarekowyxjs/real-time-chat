@@ -1,13 +1,13 @@
 ## real-time-chat
 
 #### Technologies used
-* [https://expressjs.com](Express.js) for backend
-* [http://docs.sequelizejs.com](Sequelize.js) for database models and building queries
-* [https://reactjs.org](React.js), [https://github.com/ReactTraining/react-router](React-Router) for best UX
-* [https://redux.js.org](Redux) to store data
-* [https://github.com/axios/axios](Axios), [https://github.com/reduxjs/redux-thunk](Redux-Thunk) for asonchrynus requests
-* [https://socket.io](Socket.io) for real time data exchange
-* [https://www.mysql.com](MySQL) as DBSM
+* [Express.js](https://expressjs.com) for backend
+* [Sequelize.js](http://docs.sequelizejs.com) for database models and building queries
+* [React.js](https://reactjs.org), [React-router](https://github.com/ReactTraining/react-router) for best UX
+* [Redux](https://redux.js.org) to store data
+* [Axios](https://github.com/axios/axios), [Redux-thunk](https://github.com/reduxjs/redux-thunk) for asonchrynus requests
+* [Socket.io](https://socket.io) for real time data exchange
+* [MySQL](https://www.mysql.com) as DBSM
 
 #### Application functions
 * User authentication, login, register
@@ -15,4 +15,4 @@
 * Real time chating
 
 #### LICENSE
-I used [https://opensource.org/licenses/MIT](MIT) license
+I used [MIT](https://opensource.org/licenses/MIT) license
