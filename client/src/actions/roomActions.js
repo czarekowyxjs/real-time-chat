@@ -83,8 +83,11 @@ export const returnToDefaultVerifyRoom = () => {
 	});
 };
 
-export const updateOnlineUsersList = (users, user) => {
+export const updateOnlineUsersList = users => {
 	return dispatch => {
-
+		dispatch({
+			type: "UPDATE_ONLINE_USERS_LIST",
+			onlineUsers: users
+		});
 	};
 };

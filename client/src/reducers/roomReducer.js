@@ -50,6 +50,11 @@ export default (state = initialState, action) => {
 				verifyRoomLoaded: true,
 				verifyRoomError: action.error
 			};
+		case "UPDATE_ONLINE_USERS_LIST":
+			return {
+				...state,
+				usersOnlineList: action.onlineUsers
+			}
 		default:
 			return state;
 	}

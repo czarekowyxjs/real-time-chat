@@ -10,7 +10,7 @@ class Navigation extends React.Component {
 		return (
 			<div id="nav-bar">
 				<div className="chat-logo">
-					<h1>Real time chat</h1>
+					<h1><Link to="/">Real time chat</Link></h1>
 					<p>version 0.1.0</p>
 				</div>
 				<div className="profile-box">

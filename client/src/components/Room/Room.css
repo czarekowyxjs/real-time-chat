@@ -2,9 +2,25 @@
 	width:100%;
 	height:100%;
 	display:flex;
-	flex-direction:column;
-	align-items:center;
+	flex-direction:row;
+	align-items:flex-start;
 	justify-content:flex-start;
+}
+
+.room-root-app-side {
+	width:80%;
+	height:100%;
+	display:flex;
+	flex-direction:column;
+	align-items:flex-start;
+	justify-content:flex-start;
+}
+
+.room-root-aside {
+	width:20%;
+	min-width:180px;
+	height:100%;
+	background-color:#262626;
 }
 
 .room-header {
