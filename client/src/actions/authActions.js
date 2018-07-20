@@ -18,6 +18,9 @@ export const userRequireAuth = (token) => {
 
 			} else if(response.status === 200) {
 
+				let user = response.data.user;
+				delete user.Token;
+
 				dispatch({
 					type: "FETCH_USER_DATA",
 					user: response.data.user

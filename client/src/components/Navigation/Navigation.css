@@ -10,11 +10,12 @@
 }
 
 .chat-logo {
-	padding:16px;
+	padding:16px 16px 6px 16px;
 }
 
 .chat-logo > h1 {
 	font-size:1.0rem;
+	color:#fbfbfb;
 }
 
 .chat-logo > p {
@@ -24,15 +25,34 @@
 
 .profile-box {
 	width:100%;
+}
+
+.profile-box > a {
+	width:100%;
+	padding:10px;
 	display:flex;
 	flex-direction:row;
 	align-items:center;
-	padding:12px 10px;
 	cursor:pointer;
+	border-top:1px solid transparent;
+	border-bottom:1px solid transparent;
+	text-decoration:none;
 }
 
-.profile-box > p {
+.profile-box > a > img {
+	width:24px;
+	height:24px;
+	border-radius:100%;
+}
+
+.profile-box > a > p {
+	margin-left:5px;
 	font-size:0.9rem;
 	font-weight:600;
-	color:#a4a4a4;
+	color:#fbfbfb;
+}
+
+.profile-box > a:hover {
+	border-top:1px solid rgba(255,255,255,0.1);
+	border-bottom:1px solid rgba(0,0,0,0.2);
 }

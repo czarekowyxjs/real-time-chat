@@ -5,7 +5,7 @@ import db from '../models';
 const router = new Router();
 
 router.route('/login')
-.get((req, res) => {
+.post((req, res) => {
 	const username = req.body.user.username;
 	const password = req.body.user.password;
 
@@ -53,8 +53,7 @@ router.route('/login')
 	})
 	.catch(err => {
 		const error = new CustomError(500, "Server error, please try again", req);
-		res.status(500);
-		res.send({
+		res.status(500).send({
 			error
 		});
 	});

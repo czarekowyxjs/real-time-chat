@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
  
 import "./Navigation.css";
@@ -13,8 +14,10 @@ class Navigation extends React.Component {
 					<p>version 0.1.0</p>
 				</div>
 				<div className="profile-box">
-					<p>{user.username}</p>
-					<img src="http://localhost:3001/public/images/default-avatar.png"/>
+					<Link to={`/account/${user.uid}`}>
+						<img src="/public/images/default-avatar.png" alt={user.username}/>
+						<p>{user.username}</p>
+					</Link>
 				</div>
 			</div>
 		);

@@ -1,7 +1,9 @@
 // modules
 import express from 'express';
+import http from 'http';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import socket_io from 'socket.io';
 
 // import configuration
 import config from './config/server.conf';
@@ -9,27 +11,131 @@ import config from './config/server.conf';
 // custom error
 import CustomError from './helpers/CustomError';
 
-// controllers with routes
-
 // db models
 import db from './models';
 
 // routes and controllers
 import AuthController from './controllers/auth.controller';
+import RoomController from './controllers/room.controller';
 
 // init server
-const server = express();
+const app = express();
 
 // middlewares
-server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({ extended: true }));
-server.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 // apply controllers and routes
-server.use("/api/auth", AuthController);
+app.use("/api/auth", AuthController);
+app.use("/api/room", RoomController);
 
 // serve static files
+app.use("/public", express.static(__dirname+"/public"));
 
+// create server
+const server = http.createServer(app);
+
+// socket server
+const io = socket_io(server);
+
+let users = [];
+
+io.sockets.on("connection", socket => {
+	
+	socket.on('joinToRoom', data => {
+
+		db.RoomUserOnline
+		.create({
+			uid: data.user.uid,
+			rid: data.rid,
+			socket: socket.id
+		})
+		.then(resRoomUserOnline => {
+
+			db.RoomUserOnline
+			.findAll({
+				where: {
+					rid: data.rid
+				},
+				order: [
+					['_createdAt', 'DESC']
+				]
+			})
+			.then(resRoomUserOnlineAll => {
+
+				socket.join(data.rid);
+				io.to(data.rid).emit("updateUsersList", {
+					users: resRoomUserOnlineAll
+				});
+
+			})
+			.catch(err => {
+
+			});
+
+		})
+		.catch(err => {
+
+		});
+	});
+
+	socket.on("leaveRoom", () => {
+		console.log('xd');
+		db.RoomUserOnline
+		.findOne({
+			where: {
+				socket: socket.id
+			}
+		})
+		.then(resOnlineUser => {
+			console.log(resOnlineUser);
+			if(resOnlineUser) {
+
+				db.RoomUserOnline
+				.destroy({
+					where: {
+						socket: socket.id
+					}
+				})
+				.then(resRoomUserOnline => {
+
+					db.RoomUserOnline
+					.findAll({
+						where: {
+							rid: resOnlineUser.rid
+						},
+						order: [
+							['_createdAt', 'DESC']
+						]
+					})
+					.then(resRoomUserOnlineAll => {
+						
+						socket.leave(resOnlineUser.rid);
+						io.to(resOnlineUser.rid).emit("updateUsersList", {
+							users: resRoomUserOnlineAll
+						});
+
+					})
+					.catch(err => {
+
+					});
+
+				})
+				.catch(err => {
+
+				});				
+
+			}
+
+		})
+		.catch(err => {
+
+		});
+
+	});
+
+});
 
 // start server
 server.listen(config.port, () => {
