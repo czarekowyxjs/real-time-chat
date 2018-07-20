@@ -25,6 +25,7 @@ export const createNewRoom = (roomName, token) => {
 				});
 
 			} catch(e) {
+				console.log(e.response);
 				dispatch({
 					type: "CREATE_ROOM_ERROR",
 					error: e.response.data.error
@@ -89,5 +90,11 @@ export const updateOnlineUsersList = users => {
 			type: "UPDATE_ONLINE_USERS_LIST",
 			onlineUsers: users
 		});
+	};
+};
+
+export const joinToRoom = (rid, token) => {
+	return dispatch => {
+
 	};
 };

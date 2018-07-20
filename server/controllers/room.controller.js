@@ -17,7 +17,6 @@ router.route('/create')
 		room_name: roomName
 	})
 	.then(resRoom => {
-
 		db.RoomUser
 		.create({
 			rid: resRoom.rid,

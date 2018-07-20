@@ -54,7 +54,6 @@ class Create extends React.Component {
 						<div className="btn-wrapper">
 							<button type="submit" className="btn btn-green">Create</button>
 						</div>
-
 					</form>
 				</div>
 			</div>

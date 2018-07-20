@@ -1,0 +1,19 @@
+.room-join-form {
+
+}
+
+.room-join-form > form {
+	display:flex;
+	flex-direction:column;
+	align-items:flex-start;
+	justify-content:flex-start;
+	width:400px;
+}
+
+.room-join-form > form > input {
+	width:100%;
+}
+
+.room-join-form > form > label {
+	margin:3px;
+}

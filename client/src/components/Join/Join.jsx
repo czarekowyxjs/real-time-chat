@@ -1,5 +1,7 @@
 import React from 'react';
 
+import "./Join.css";
+
 class Join extends React.Component {
 	constructor(props) {
 		super(props);
@@ -13,7 +15,11 @@ class Join extends React.Component {
 	}
 
 	componentDidMount() {
-
+		if(this.props.match.params.hash) {
+			this.setState({
+				room: this.props.match.params.hash
+			});
+		}
 	}
 
 	handleChange(e) {
@@ -29,17 +35,22 @@ class Join extends React.Component {
 	render() {
 		return (
 			<div className="window-wrapper">
-				<label htmlFor="room">Name of room</label>
-				<input 
-					type="text" 
-					className="default-input"
-					value={this.state.room}
-					name="room"
-					id="room"
-					onChange={this.handleChange}
-				/>
-				<button type="submit" onClick={this.handleSubmit} className="btn btn-green">Enter</button>
-
+				<div className="room-join-form">
+					<form onSubmit={this.handleSubmit}>
+						<label htmlFor="room">Identifier of room</label>
+						<input 
+							type="text" 
+							className="default-input"
+							value={this.state.room}
+							name="room"
+							id="room"
+							onChange={this.handleChange}
+						/>
+						<div className="btn-wrapper">
+							<button type="submit" className="btn btn-green">Join</button>
+						</div>
+					</form>
+				</div>
 			</div>
 		);
 	}

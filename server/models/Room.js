@@ -1,13 +1,19 @@
 import Sequelize from 'sequelize';
+import crypto from 'crypto';
 import db from '../config/db.conf';
 
 const Room = db.define('Room', {
 	rid: {
 		type: Sequelize.BIGINT,
 		unique: true,
-		autoIncrement: true,
 		primaryKey: true,
+		autoIncrement: true,
 		field: 'rid'
+	},
+	hash: {
+		type: Sequelize.STRING(99),
+		unique: true,
+		field: 'hash'
 	},
 	admin_uid: {
 		type: Sequelize.BIGINT,
@@ -25,7 +31,12 @@ const Room = db.define('Room', {
 }, {
 	hooks: {
 		beforeCreate: (room, options) => {
-			return room._createdAt = Math.floor(new Date().getTime()/1000);
+			room._createdAt = Math.floor(new Date().getTime()/1000);
+			const now = (new Date()).valueOf().toString();
+			const rand = Math.random().toString();
+			const hash = crypto.createHash('sha1').update(now + rand).digest('hex');
+			room.hash = hash;
+			return room;
 		}
 	},
 	tableName: 'rooms',

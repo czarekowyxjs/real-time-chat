@@ -3,10 +3,15 @@
 }
 
 .room-create-form > form {
+	width:400px;
 	display:flex;
 	flex-direction:column;
 	align-items:flex-start;
 	justify-content:flex-start;
+}
+
+.room-create-form > form > input {
+	width:100%;
 }
 
 .room-create-form > form > label {
