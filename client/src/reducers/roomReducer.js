@@ -2,6 +2,8 @@ const initialState = {
 	createLoaded: false,
 	createError: {},
 	tmpRid: null,
+	joinLoaded: false,
+	joinError: {},
 	verifyRoomLoaded: false,
 	verifyRoomError: {},
 	roomData: {},
@@ -30,6 +32,23 @@ export default (state = initialState, action) => {
 				createLoaded: true,
 				createError: action.error
 			};
+		case "JOIN_TO_ROOM_BEGIN":
+			return {
+				...state,
+				joinLoaded: false,
+				joinError: {}
+			}
+		case "JOIN_TO_ROOM":
+			return {
+				...state,
+				joinLoaded: true
+			};
+		case "JOIN_TO_ROOM_ERROR":
+			return {
+				...state,
+				joinLoaded: true,
+				joinError: action.error
+			};
 		case "VERIFY_ROOM_BEGIN":
 			return {
 				...state,
@@ -54,7 +73,12 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				usersOnlineList: action.onlineUsers
-			}
+			};
+		case "PUSH_MESSAGE":
+			return {
+				...state,
+				messages: action.messages
+			};
 		default:
 			return state;
 	}

@@ -6,7 +6,7 @@ class Message extends React.Component {
 	render() {
 		return (
 			<div className="message-wrapper">
-				asd
+				<p>{this.props.message.content}</p>
 			</div>
 		);
 	}

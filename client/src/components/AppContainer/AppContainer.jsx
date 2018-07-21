@@ -20,7 +20,7 @@ class AppContainer extends React.Component {
 					<div id="root-app-body">
 						<Switch>
 							<Route path="/" exact={true} component={MainWindow}/>
-							<Route path="/join/:hash" component={Join}/>
+							<Route path="/join/:rid" component={Join}/>
 							<Route path="/join" component={Join}/>
 							<Route path="/create" component={Create}/>
 							<Route path="/room/:rid" component={Room}/>

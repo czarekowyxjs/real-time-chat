@@ -3,11 +3,17 @@
 }
 
 .room-create-form > form {
-	width:400px;
+	width:340px;
 	display:flex;
 	flex-direction:column;
 	align-items:flex-start;
 	justify-content:flex-start;
+}
+
+.room-create-form > form > p {
+	font-size:0.65rem;
+	color:#a4a4a4;
+	margin:2px;
 }
 
 .room-create-form > form > input {

@@ -87,6 +87,11 @@ textarea {
 	box-shadow:0px 2px 4px 0px rgba(0,0,0,0.1);
 }
 
+.default-input:focus {
+	box-shadow:0px 0px 3px 0px #3399cc;
+	border:1px solid #0099cc;	
+}
+
 .invisible {
 	display:none;
 }

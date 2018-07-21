@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const createNewRoom = (roomName, token) => {
+export const createNewRoom = (roomName, password, token) => {
 	return async dispatch => {
 
 		dispatch({
@@ -11,7 +11,8 @@ export const createNewRoom = (roomName, token) => {
 			try {	
 
 				const response = await axios.post("/api/room/create", {
-					roomName: roomName
+					roomName: roomName,
+					password: password
 				}, {
 					headers: {
 						'Content-Type': 'application/json', 
@@ -93,8 +94,54 @@ export const updateOnlineUsersList = users => {
 	};
 };
 
-export const joinToRoom = (rid, token) => {
+export const joinToRoom = (rid, password, token) => {
+	return async dispatch => {
+
+		dispatch({
+			type: "JOIN_TO_ROOM_BEGIN"
+		});
+
+		try {
+
+			const response = await axios.post("/api/room/join", {
+				rid: rid,
+				password: password
+			}, {
+				headers: {
+					'Content-Type': 'application/json', 
+					'authorization': token
+				}
+			});
+
+			dispatch({
+				type: "JOIN_TO_ROOM"
+			});
+
+		} catch(e) {
+			dispatch({
+				type: "JOIN_TO_ROOM_ERROR",
+				error: e.response.data.error
+			});
+		}
+	};
+};
+
+export const returnToDefaultJoin = () => {
+	return dispatch => dispatch({
+		type: "JOIN_TO_ROOM_BEGIN"
+	});
+};
+
+export const pushMessage = (messages, message) => {
 	return dispatch => {
 
+		let newMessages = messages;
+
+		newMessages.push(message);
+
+		dispatch({
+			type: "PUSH_MESSAGE",
+			messages: messages
+		});
 	};
 };

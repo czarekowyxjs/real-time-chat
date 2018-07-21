@@ -10,14 +10,14 @@ const Room = db.define('Room', {
 		autoIncrement: true,
 		field: 'rid'
 	},
-	hash: {
-		type: Sequelize.STRING(99),
-		unique: true,
-		field: 'hash'
-	},
 	admin_uid: {
 		type: Sequelize.BIGINT,
 		field: "admin_uid"
+	},
+	password: {
+		type: Sequelize.STRING(999),
+		required: true,
+		field: 'password'
 	},
 	room_name: {
 		type: Sequelize.STRING(99),
@@ -32,10 +32,6 @@ const Room = db.define('Room', {
 	hooks: {
 		beforeCreate: (room, options) => {
 			room._createdAt = Math.floor(new Date().getTime()/1000);
-			const now = (new Date()).valueOf().toString();
-			const rand = Math.random().toString();
-			const hash = crypto.createHash('sha1').update(now + rand).digest('hex');
-			room.hash = hash;
 			return room;
 		}
 	},

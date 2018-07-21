@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import socket_io from 'socket.io-client';
-import { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList } from '../../actions/roomActions';
+import { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList, pushMessage } from '../../actions/roomActions';
 import Message from '../Message/Message.jsx';
 
 import "./Room.css";
@@ -21,6 +21,7 @@ class Room extends React.Component {
 	
 		this.verifyRoom = this.verifyRoom.bind(this);
 		this.handleChange = this.handleChange.bind(this);
+		this.handleKeyPress = this.handleKeyPress.bind(this);
 		this.renderMessages = this.renderMessages.bind(this);
 		this.leaveRoom = this.leaveRoom.bind(this);
 	}
@@ -35,7 +36,7 @@ class Room extends React.Component {
 	}
 
 	leaveRoom() {
-		this.props.history.replace("/join");
+		this.props.history.replace("/");
 	}
 
 	verifyRoom() {
@@ -53,6 +54,10 @@ class Room extends React.Component {
 		socket.on("updateUsersList", data => {
 			this.props.updateOnlineUsersList(data.users);
 		});
+
+		socket.on('newMessage', data => {
+			this.props.pushMessage(this.props.room.messages, data.message);
+		});
 	}
 
 	handleChange(e) {
@@ -61,8 +66,31 @@ class Room extends React.Component {
 		});
 	}
 
-	renderMessages() {
+	handleKeyPress(e) {
+		if(e.key === "Enter") {
+			e.preventDefault();
+			if(this.state.message.length > 0 && this.state.message.length < 999) {
+				socket.emit("sendMessage", {
+					uid: this.props.user.user.uid,
+					rid: this.props.room.roomData.rid,
+					message: this.state.message
+				});
+
+				this.setState({
+					message: ''
+				});
+
+			}
+		}
 		return null;
+	}
+
+	renderMessages() {
+		const messages = this.props.room.messages;
+
+		return messages.map((key, index) => {
+			return <Message key={key.mid} message={key}/>;
+		});
 	}
 
 	render() {
@@ -80,15 +108,11 @@ class Room extends React.Component {
 			<div id="room-root">
 				<div className="room-root-app-side">
 					<div className="room-header">
-						<div className="room-header-title">
-							<h2>{room.roomData.room_name}</h2>
-							<p>{`#${room.roomData.rid}`}</p>
-						</div>
 					</div>
 					<div className="room-body">
 						<div className="room-chat-app">
 							<div className="chat-app-messages">
-
+								{this.renderMessages()}
 							</div>
 							<div className="chat-app-input">
 								<textarea
@@ -96,6 +120,7 @@ class Room extends React.Component {
 									id="message"
 									value={this.state.message}
 									onChange={this.handleChange}
+									onKeyPress={this.handleKeyPress}
 								></textarea>
 								<label htmlFor="message" className={this.state.message.length > 0 ? "invisible" : null}>Type your message...</label>
 							</div>
@@ -103,6 +128,12 @@ class Room extends React.Component {
 					</div>
 				</div>
 				<div className="room-root-aside">
+					<div className="room-aside-title">
+						<div>
+							<h2>{room.roomData.room_name}</h2>
+							<p>{`#${room.roomData.rid}`}</p>
+						</div>
+					</div>
 					<div className="room-aside-leave">
 						<button onClick={this.leaveRoom}>
 							Leave room
@@ -121,4 +152,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default connect(mapStateToProps, { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList })(Room);
+export default connect(mapStateToProps, { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList, pushMessage })(Room);

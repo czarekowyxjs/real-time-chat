@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { joinToRoom, returnToDefaultJoin } from '../../actions/roomActions';
 
 import "./Join.css";
 
@@ -7,17 +10,22 @@ class Join extends React.Component {
 		super(props);
 
 		this.state = {
-			room: ''
+			room: '',
+			password: ''
 		};
 
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
+	componentWillUnmount() {
+		this.props.returnToDefaultJoin();
+	}
+
 	componentDidMount() {
-		if(this.props.match.params.hash) {
+		if(this.props.match.params.rid) {
 			this.setState({
-				room: this.props.match.params.hash
+				room: this.props.match.params.rid
 			});
 		}
 	}
@@ -28,11 +36,19 @@ class Join extends React.Component {
 		});
 	}
 
-	handleSubmit() {
+	handleSubmit(e) {
+		e.preventDefault();
 
+		const rid = this.state.room;
+		const password = this.state.password;
+		const token = localStorage.getItem("token");
+		this.props.joinToRoom(rid, password, token);
 	}
 
 	render() {
+		if(this.props.room.joinLoaded) {
+			return <Redirect to={`/room/${this.state.room}`}/>;
+		}	
 		return (
 			<div className="window-wrapper">
 				<div className="room-join-form">
@@ -46,6 +62,15 @@ class Join extends React.Component {
 							id="room"
 							onChange={this.handleChange}
 						/>
+						<label htmlFor="password">Room password</label>
+						<input 
+							type="password" 
+							className="default-input"
+							value={this.state.password}
+							name="password"
+							id="password"
+							onChange={this.handleChange}
+						/>
 						<div className="btn-wrapper">
 							<button type="submit" className="btn btn-green">Join</button>
 						</div>
@@ -56,4 +81,10 @@ class Join extends React.Component {
 	}
 }
 
-export default Join;
+const mapStateToProps = state => {
+	return {
+		room: state.room
+	};
+};
+
+export default connect(mapStateToProps, { joinToRoom, returnToDefaultJoin })(Join);

@@ -17,6 +17,7 @@ import db from './models';
 // routes and controllers
 import AuthController from './controllers/auth.controller';
 import RoomController from './controllers/room.controller';
+import MessageController from './controllers/message.controller';
 
 // init server
 const app = express();
@@ -29,6 +30,7 @@ app.use(cors());
 // apply controllers and routes
 app.use("/api/auth", AuthController);
 app.use("/api/room", RoomController);
+app.use("/api/message", MessageController);
 
 // serve static files
 app.use("/public", express.static(__dirname+"/public"));
@@ -41,6 +43,7 @@ const io = socket_io.listen(server);
 
 io.on("connection", socket => {
 	
+	// join to room
 	socket.on('joinToRoom', data => {
 
 		db.RoomUserOnline
@@ -82,6 +85,32 @@ io.on("connection", socket => {
 		});
 	});
 
+	//messages
+	socket.on('sendMessage', data => {
+
+		if(data.message.length > 0 && data.message.length < 999) {
+
+			db.RoomMessage
+			.create({ rid: data.rid, uid: data.uid, content: data.message })
+			.then(resRoomMessage => {
+
+				if(resRoomMessage) {
+
+					io.to(data.rid).emit("newMessage", {
+						message: resRoomMessage
+					});
+					
+				}
+
+			})
+			.catch(err => {
+
+			});
+		}
+
+	});
+
+	// when user leave room
 	socket.on("disconnect", () => {
 		db.RoomUserOnline
 		.findOne({

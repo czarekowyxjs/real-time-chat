@@ -7,7 +7,7 @@
 	flex-direction:column;
 	align-items:flex-start;
 	justify-content:flex-start;
-	width:400px;
+	width:340px;
 }
 
 .room-join-form > form > input {
@@ -15,5 +15,5 @@
 }
 
 .room-join-form > form > label {
-	margin:3px;
+	margin:9px 3px 3px 3px;
 }
