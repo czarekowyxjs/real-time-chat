@@ -58,13 +58,21 @@ router.route("/verify")
 		where: {
 			rid: rid
 		},
-		include: {
+		include: [{
 			model: db.RoomUser,
 			where: {
-				rid: rid,
-				uid: uid
-			}
-		}
+				rid: rid
+			},
+			include: [{
+				model: db.User,
+				attributes: ['uid', 'username', 'avatar']
+			}]
+		}, {
+			model: db.RoomMessage
+		}],
+		order: [
+			[db.RoomMessage, "_createdAt", "ASC"]
+		]
 	})
 	.then(resRoom => {
 

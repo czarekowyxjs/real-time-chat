@@ -22,18 +22,28 @@
 	height:100%;
 	background-color:#262626;
 	display:flex;
-	flex-flow:row wrap;
+	flex-direction:column;
 	align-items:flex-start;
 	justify-content:flex-start;
+}
+
+.room-root-aside-content {
+	width:100%;
+	height:100%;
+	display:flex;
+	flex-direction:column;
+}
+
+.room-root-aside-footer {
+	width:100%;
+	height:45px;
 }
 
 .room-aside-title {
 	width:100%;
 	display:flex;
 	flex-direction:row;
-	align-items:center;
-	justify-content:center;
-	padding:8px;
+	padding:14px 0px 8px 14px;
 }
 
 .room-aside-title > div > h2 {
@@ -51,7 +61,7 @@
 
 .room-aside-leave {
 	width:100%;
-	height:45px;
+	height:100%;
 	align-self:flex-end;
 }
 
@@ -92,7 +102,7 @@
 
 .room-chat-app {
 	width:100%;
-	height:100%;
+	height:100vh;
 	display:flex;
 	flex-direction:column;
 	align-items:flex-start;
@@ -102,11 +112,22 @@
 .chat-app-messages {
 	width:100%;
 	height:100%;
-	display:flex;
-	flex-direction:column;
-	align-items:flex-start;
-	justify-content:flex-start;
-	padding:0px 24px;
+	padding:4px 8px;
+	overflow-y:auto;
+}
+
+.chat-app-messages::-webkit-scrollbar {
+    width:7px;
+}
+ 
+.chat-app-messages::-webkit-scrollbar-track {
+    background:rgba(0,0,0,0.2);
+}
+ 
+.chat-app-messages::-webkit-scrollbar-thumb {
+  background-color:#434343;
+  outline: 1px solid #434343;
+  border-radius:10px;
 }
 
 .chat-app-input {

@@ -64,9 +64,19 @@ export const verifyRoom = (rid, token) => {
 					error: response.data.error
 				});				
 			} else if(response.status === 200) {
+
+				let roomData = response.data.room;
+				let messages = response.data.room.RoomMessages;
+				let usersAllList = response.data.room.RoomUsers;
+
+				delete roomData['RoomMessages'];
+				delete roomData['RoomUsers'];
+
 				dispatch({
 					type: "VERIFY_ROOM",
-					room: response.data.room
+					room: roomData,
+					messages: messages,
+					usersAllList: usersAllList
 				});
 			}
 
@@ -134,7 +144,6 @@ export const returnToDefaultJoin = () => {
 
 export const pushMessage = (messages, message) => {
 	return dispatch => {
-
 		let newMessages = messages;
 
 		newMessages.push(message);
@@ -143,5 +152,38 @@ export const pushMessage = (messages, message) => {
 			type: "PUSH_MESSAGE",
 			messages: messages
 		});
+	};
+};
+
+export const getAllMessages = (messagesPage, newMessages, rid, token) => {
+	return async dispatch => {
+		
+		dispatch({
+			type: "GET_ALL_MESSAGES_LOAD"
+		});
+
+		try {
+
+			const response = await axios.get("/api/message/all?p="+messagesPage+"&rid="+rid+"&new="+newMessages, {
+				headers: {
+					'Content-Type': 'application/json', 
+					'authorization': token
+				}
+			});
+
+			let messages = response.data.messages;
+			const newPage = messagesPage+1;
+
+			messages.reverse();
+
+			dispatch({
+				type: "GET_ALL_MESSAGES",
+				messagesPage: newPage,
+				messages: messages
+			});
+
+		} catch(e) {
+			console.log(e);
+		}
 	};
 };

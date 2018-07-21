@@ -7,7 +7,11 @@ const initialState = {
 	verifyRoomLoaded: false,
 	verifyRoomError: {},
 	roomData: {},
+	usersAllList: [],
 	messages: [],
+	messagesPage: 0,
+	newMessages: 0,
+	messagesLoaded: false,
 	usersOnlineList: []
 };
 
@@ -54,14 +58,18 @@ export default (state = initialState, action) => {
 				...state,
 				verifyRoomLoaded: false,
 				roomData: {},
+				usersOnlineList: [],
+				usersAllList: [],
 				messages: [],
-				usersOnlineList: []
+				messagesPage: 0,
+				newMessages: 0
 			};
 		case "VERIFY_ROOM":
 			return {
 				...state,
 				verifyRoomLoaded: true,
-				roomData: action.room
+				roomData: action.room,
+				usersAllList: action.usersAllList
 			};
 		case "VERIFY_ROOM_ERROR":
 			return {
@@ -74,10 +82,31 @@ export default (state = initialState, action) => {
 				...state,
 				usersOnlineList: action.onlineUsers
 			};
+		case "GET_ALL_MESSAGES_BEGIN":
+			return {
+				...state,
+				messages: [],
+				messagesPage: 0,
+				messagesLoaded: false			
+			};
+		case "GET_ALL_MESSAGES_LOAD":
+			return {
+				...state,
+				messagesLoaded: false
+			};
+		case "GET_ALL_MESSAGES":
+			const messages = action.messages.concat(state.messages);
+			return {
+				...state,
+				messages: messages,
+				messagesPage: action.messagesPage,
+				messagesLoaded: true
+			};
 		case "PUSH_MESSAGE":
 			return {
 				...state,
-				messages: action.messages
+				messages: action.messages,
+				newMessages: state.newMessages+1
 			};
 		default:
 			return state;

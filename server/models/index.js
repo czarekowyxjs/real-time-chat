@@ -11,8 +11,14 @@ User.hasOne(Token, { foreignKey: 'uid' });
 RoomUser.belongsTo(Room, { foreignKey: 'rid' });
 Room.hasMany(RoomUser, { foreignKey: 'rid' });
 
+RoomUser.belongsTo(User, { foreignKey: 'uid' });
+User.hasMany(RoomUser, { foreignKey: 'uid' });
+
 RoomUserOnline.belongsTo(User, { foreignKey: 'uid' });
 User.hasMany(RoomUserOnline, { foreignKey: 'uid' });
+
+RoomMessage.belongsTo(Room, { foreignKey: 'rid' });
+Room.hasMany(RoomMessage, { foreignKey: 'rid' });
 
 export default {
 	User,

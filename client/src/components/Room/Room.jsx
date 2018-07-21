@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import socket_io from 'socket.io-client';
-import { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList, pushMessage } from '../../actions/roomActions';
+import { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList, pushMessage, getAllMessages } from '../../actions/roomActions';
 import Message from '../Message/Message.jsx';
+import UsersList from './UsersList.jsx';
 
 import "./Room.css";
 
@@ -14,16 +15,22 @@ class Room extends React.Component {
 		super(props);
 
 		this.state = {
-			message: ''
+			message: '',
+			first: false
 		};
 
 		socket = socket_io("http://localhost:3001");
 	
 		this.verifyRoom = this.verifyRoom.bind(this);
+		this.getAllMessages = this.getAllMessages.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleKeyPress = this.handleKeyPress.bind(this);
+		this.handleScroll = this.handleScroll.bind(this);
 		this.renderMessages = this.renderMessages.bind(this);
 		this.leaveRoom = this.leaveRoom.bind(this);
+
+		// refs
+		this.chatMessagesRef = React.createRef();
 	}
 
 	componentWillUnmount() {
@@ -33,6 +40,11 @@ class Room extends React.Component {
 
 	componentDidMount() {
 		this.verifyRoom();
+		this.getAllMessages();
+	}
+
+	componentDidUpdate() {
+
 	}
 
 	leaveRoom() {
@@ -56,14 +68,33 @@ class Room extends React.Component {
 		});
 
 		socket.on('newMessage', data => {
+			let scrollToMessage = false;
+
+			if(this.chatMessagesRef.current.scrollTop === this.chatMessagesRef.current.scrollHeight-this.chatMessagesRef.current.offsetHeight) {
+				scrollToMessage = true;
+			}
 			this.props.pushMessage(this.props.room.messages, data.message);
+
+			if(scrollToMessage) {
+				this.chatMessagesRef.current.scrollTop = this.chatMessagesRef.current.scrollHeight-this.chatMessagesRef.current.offsetHeight;
+			}
 		});
+	}
+
+	getAllMessages() {
+		const token = localStorage.getItem("token");
+		const page = this.props.room.messagesPage;
+		const rid = this.props.match.params.rid;
+		const newMessages = this.props.room.newMessages;
+
+		this.props.getAllMessages(page, newMessages, rid, token);
 	}
 
 	handleChange(e) {
 		this.setState({
 			[e.target.name]: e.target.value
 		});
+		this.chatMessagesRef.current.scrollTop = this.chatMessagesRef.current.scrollHeight-this.chatMessagesRef.current.offsetHeight;
 	}
 
 	handleKeyPress(e) {
@@ -82,28 +113,53 @@ class Room extends React.Component {
 
 			}
 		}
-		return null;
+	}
+
+	handleScroll(e) {
+		if(this.props.room.messagesLoaded) {
+			if(e.target.scrollTop < 4) {
+				this.chatMessagesRef.current.scrollTop = 5;
+
+				this.getAllMessages();
+			}
+		} else {
+			e.preventDefault();
+		}
 	}
 
 	renderMessages() {
 		const messages = this.props.room.messages;
+		const usersAllList = this.props.room.usersAllList;
 
 		return messages.map((key, index) => {
-			return <Message key={key.mid} message={key}/>;
+
+			let user;
+
+			for(let i = 0;i < usersAllList.length;++i) {
+				if(usersAllList[i].uid === key.uid) {
+					user = usersAllList[i];
+					break;
+				}
+			}
+
+			let userData = {
+				author: this.props.user.user.uid === key.uid ? true : false,
+				user: user
+			};
+
+			return <Message key={key.mid} message={key} userData={userData}/>;
 		});
 	}
 
 	render() {
-		console.log(this.props);
 		if(!this.props.room.verifyRoomLoaded) {
-			return <p>Loading room...</p>;
+			return <p>Loading...</p>;
 		}
 		if(this.props.room.verifyRoomError.status) {
 			return <Redirect to="/join"/>;
 		}
 
 		const room = this.props.room;
-
 		return (
 			<div id="room-root">
 				<div className="room-root-app-side">
@@ -111,7 +167,7 @@ class Room extends React.Component {
 					</div>
 					<div className="room-body">
 						<div className="room-chat-app">
-							<div className="chat-app-messages">
+							<div className="chat-app-messages" ref={this.chatMessagesRef} onScroll={this.handleScroll}>
 								{this.renderMessages()}
 							</div>
 							<div className="chat-app-input">
@@ -128,16 +184,21 @@ class Room extends React.Component {
 					</div>
 				</div>
 				<div className="room-root-aside">
-					<div className="room-aside-title">
-						<div>
-							<h2>{room.roomData.room_name}</h2>
-							<p>{`#${room.roomData.rid}`}</p>
+					<div className="room-root-aside-content">
+						<div className="room-aside-title">
+							<div>
+								<h2>{room.roomData.room_name}</h2>
+								<p>{`#${room.roomData.rid}`}</p>
+							</div>
 						</div>
+						<UsersList allUsers={room.usersAllList} onlineUsers={room.usersOnlineList}/>
 					</div>
-					<div className="room-aside-leave">
-						<button onClick={this.leaveRoom}>
-							Leave room
-						</button>
+					<div className="room-root-aside-footer">
+						<div className="room-aside-leave">
+							<button onClick={this.leaveRoom}>
+								Leave room
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -152,4 +213,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default connect(mapStateToProps, { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList, pushMessage })(Room);
+export default connect(mapStateToProps, { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList, pushMessage, getAllMessages })(Room);

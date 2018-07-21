@@ -1,0 +1,54 @@
+.room-aside-users-list {
+	width:100%;
+	padding:8px 0px 8px 0px;
+}
+
+.users-list-title {
+	width:100%;
+	padding:8px;
+	background-color:#fbfbfb;
+	border-top:1px solid rgba(0,0,0,0.1);
+	border-bottom:1px solid rgba(0,0,0,0.1);
+}
+
+.users-list-title > h3 {
+	font-size:0.7rem;
+	color:#434343;
+}
+
+.users-list-body {
+	width:100%;
+}
+
+.users-list-body-users {
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+}
+
+.users-list-item {
+	width:100%;
+	margin:5px 0px;
+	padding:4px 12px;
+	cursor:pointer;
+}
+
+.users-list-item-info {
+	display:flex;
+	flex-direction:row;
+	align-items:center;
+}
+
+.users-list-item-info > img {
+	width:26px;
+	height:26px;
+	border-radius:100%;
+	box-shadow:0px 0px 0px 1px rgba(0,0,0,0.3)
+}
+
+.users-list-item-info > p {
+	margin-left:6px;
+	font-weight:600;
+	font-size:0.85rem;
+	color:#fbfbfb;
+}

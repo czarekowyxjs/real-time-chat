@@ -5,9 +5,33 @@ import verifyToken from '../middlewares/verifyToken';
 
 const router = new Router();
 
-router.route("/group/send")
-.post(verifyToken, (req, res) => {
-	console.log(req.body);
+router.route("/all")
+.get(verifyToken, (req, res) => {
+	const page = req.query.p;
+	const rid = req.query.rid;
+	const newMessages = req.query.new;
+	const limit = 20;
+	const offset = (page*limit)+parseInt(newMessages);
+
+	db.RoomMessage
+	.findAll({
+		where: {
+			rid: rid
+		},
+		order: [
+			['_createdAt', 'DESC']
+		],
+		limit: limit,
+		offset: offset
+	})
+	.then(resRoomMessages => {
+		res.status(200).send({
+			messages: resRoomMessages
+		});
+	})
+	.catch(err => {
+		res.status(404).send(err);
+	});
 });
 
 export default router;
