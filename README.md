@@ -1,7 +1,9 @@
 # real-time-chat
 
-***
+## Table of contents
+[How to run this app?](#how-to-run)
 
+<a name="how-to-run"/>
 ## How to run this app locally?
 1. Firstly download repository
 ```
@@ -33,8 +35,6 @@ $ npm start
 ```
 5. It's working!
 
-***
-
 ## Technologies used
 * [Express.js](https://expressjs.com) for backend
 * [Sequelize.js](http://docs.sequelizejs.com) for database models and building queries
@@ -44,16 +44,12 @@ $ npm start
 * [Socket.io](https://socket.io) for real time data exchange
 * [MySQL](https://www.mysql.com) as DBSM
 
-***
-
 ## Application functions
 * User authentication, login, register
 * Create and join to rooms
 * Password to room
 * Visible active users in room
 * Real time chating
-
-***
 
 ### LICENSE
 I used [MIT](https://opensource.org/licenses/MIT) license
