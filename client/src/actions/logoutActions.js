@@ -7,7 +7,7 @@ export const executeLogout = (token) => {
 		});
 		try {
 
-			const response = await axios.post("/api/auth/logout", {
+			await axios.post("/api/auth/logout", {
 				token: token
 			});
 
@@ -15,11 +15,12 @@ export const executeLogout = (token) => {
 				type: "RETURN_TO_INITIAL_STATE_USER"
 			});
 
+			window.localStorage.clear();
+
 			dispatch({
 				type: "LOGOUT"
 			});
 
-			window.localStorage.clear();
 
 		} catch(e) {
 			console.log(e.response);

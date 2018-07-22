@@ -12,28 +12,37 @@ router.route('/create')
 	const password = req.body.password;
 	const uid = req.locals.uid;
 
-	req.checkBody("password").isLength({ min: 6, max: 999 });
+	req.checkBody("roomName", "Invalid room name").trim().isLength({ min: 2, max: 99 });
+	req.checkBody("password", "Invalid password").trim().isLength({ min: 6, max: 999 });
+	req.checkBody("passwordAgain", "Invalid password again").equals(req.body.password);
 
 	const errors = req.validationErrors();
 
-	console.log(errors);
-
-	db.Room
-	.create({
-		admin_uid: uid,
-		password: password,
-		room_name: roomName
-	})
-	.then(resRoom => {
-		db.RoomUser
+	if(!errors) {
+		db.Room
 		.create({
-			rid: resRoom.rid,
-			uid: resRoom.admin_uid
+			admin_uid: uid,
+			password: password,
+			room_name: roomName
 		})
-		.then(resRoomUser => {
+		.then(resRoom => {
+			db.RoomUser
+			.create({
+				rid: resRoom.rid,
+				uid: resRoom.admin_uid
+			})
+			.then(resRoomUser => {
 
-			res.status(200).send({
-				rid: resRoom.rid
+				res.status(200).send({
+					rid: resRoom.rid
+				});
+
+			})
+			.catch(err => {
+				const error = new CustomError(500, "Server error, please try again", req);
+				res.status(500).send({
+					error
+				});			
 			});
 
 		})
@@ -41,16 +50,17 @@ router.route('/create')
 			const error = new CustomError(500, "Server error, please try again", req);
 			res.status(500).send({
 				error
-			});			
+			});
 		});
+	} else {
 
-	})
-	.catch(err => {
-		const error = new CustomError(500, "Server error, please try again", req);
-		res.status(500).send({
-			error
-		});
-	});
+			const error = new CustomError(404, "Invalid room name or password", req);
+			res.status(404).send({
+				error,
+				errors
+			});			
+
+	}
 });
 
 router.route("/verify")

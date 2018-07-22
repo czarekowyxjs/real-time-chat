@@ -7,33 +7,31 @@ export const createNewRoom = (roomName, password, passwordAgain, token) => {
 			type: "CREATE_ROOM_BEGIN"
 		});
 
-		if(roomName.length > 1) {
-			try {	
+		try {	
 
-				const response = await axios.post("/api/room/create", {
-					roomName: roomName,
-					password: password
-				}, {
-					headers: {
-						'Content-Type': 'application/json', 
-						'authorization': token
-					}
-				});
+			const response = await axios.post("/api/room/create", {
+				roomName: roomName,
+				password: password,
+				passwordAgain: passwordAgain
+			}, {
+				headers: {
+					'Content-Type': 'application/json', 
+					'authorization': token
+				}
+			});
 
-				dispatch({
-					type: "CREATED_ROOM",
-					rid: response.data.rid
-				});
+			dispatch({
+				type: "CREATED_ROOM",
+				rid: response.data.rid
+			});
 
-			} catch(e) {
-				console.log(e.response);
-				dispatch({
-					type: "CREATE_ROOM_ERROR",
-					error: e.response.data.error
-				});
-			}
-
-		} 
+		} catch(e) {
+			console.log(e.response);
+			dispatch({
+				type: "CREATE_ROOM_ERROR",
+				error: e.response.data.error
+			});
+		}
 	};
 };
 
@@ -113,7 +111,7 @@ export const joinToRoom = (rid, password, token) => {
 
 		try {
 
-			const response = await axios.post("/api/room/join", {
+			await axios.post("/api/room/join", {
 				rid: rid,
 				password: password
 			}, {

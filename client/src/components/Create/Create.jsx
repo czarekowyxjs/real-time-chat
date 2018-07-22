@@ -36,7 +36,7 @@ class Create extends React.Component {
 	}
 
 	render() {
-		if(this.props.room.createLoaded) {
+		if(this.props.room.createLoaded && !this.props.room.createError.status) {
 			return <Redirect to={`/room/${this.props.room.tmpRid}`}/>;
 		}
 		
@@ -53,7 +53,7 @@ class Create extends React.Component {
 							id="room"
 							onChange={this.handleChange}
 						/>
-						<p>Name of your room, it should reflect the thematics of the room</p>
+						<p>Name of your room, it should reflect the thematics of the room. Length of room name must have min 2 and max 99 characters.</p>
 						<label htmlFor="password">Room password</label>
 						<input 
 							type="password" 
@@ -63,7 +63,7 @@ class Create extends React.Component {
 							id="password"
 							onChange={this.handleChange}
 						/>
-						<p>Password will be need to for other users to join to your room</p>
+						<p>Password will be need for other users to join to your room. Length of password must have min 6 characters.</p>
 						<label htmlFor="passwordAgain">Repeat password to your room</label>
 						<input 
 							type="password" 
@@ -73,7 +73,7 @@ class Create extends React.Component {
 							id="passwordAgain"
 							onChange={this.handleChange}
 						/>
-						<p>Passwords must be that same</p>
+						<p>Passwords must be that same.</p>
 						<div className="btn-wrapper">
 							<button type="submit" className="btn btn-green">Create</button>
 						</div>
