@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import socket_io from 'socket.io-client';
-import { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList, pushMessage, getAllMessages } from '../../actions/roomActions';
+import { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList, pushMessage, getAllMessages, returnToDefaultMessages } from '../../actions/roomActions';
 import Message from '../Message/Message.jsx';
 import UsersList from './UsersList.jsx';
 
@@ -35,16 +35,13 @@ class Room extends React.Component {
 
 	componentWillUnmount() {
 		this.props.returnToDefaultVerifyRoom();
+		this.props.returnToDefaultMessages();
 		socket.disconnect();
 	}
 
 	componentDidMount() {
 		this.verifyRoom();
 		this.getAllMessages();
-	}
-
-	componentDidUpdate() {
-
 	}
 
 	leaveRoom() {
@@ -130,10 +127,12 @@ class Room extends React.Component {
 	renderMessages() {
 		const messages = this.props.room.messages;
 		const usersAllList = this.props.room.usersAllList;
+		let user,
+				userData,
+				renderAvatar;
 
 		return messages.map((key, index) => {
 
-			let user;
 
 			for(let i = 0;i < usersAllList.length;++i) {
 				if(usersAllList[i].uid === key.uid) {
@@ -142,12 +141,20 @@ class Room extends React.Component {
 				}
 			}
 
-			let userData = {
+			userData = {
 				author: this.props.user.user.uid === key.uid ? true : false,
 				user: user
 			};
 
-			return <Message key={key.mid} message={key} userData={userData}/>;
+			renderAvatar = true;
+
+			if(!userData.author && messages[index+1]) {
+				if(userData.user.uid === messages[index+1].uid) {
+					renderAvatar = false;
+				}
+			}
+
+			return <Message key={key.mid} message={key} userData={userData} renderAvatar={renderAvatar}/>;
 		});
 	}
 
@@ -213,4 +220,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default connect(mapStateToProps, { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList, pushMessage, getAllMessages })(Room);
+export default connect(mapStateToProps, { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList, pushMessage, getAllMessages, returnToDefaultMessages })(Room);

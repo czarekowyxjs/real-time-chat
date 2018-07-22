@@ -45,6 +45,7 @@ export default (state = initialState, action) => {
 		case "JOIN_TO_ROOM":
 			return {
 				...state,
+				joinError: {},
 				joinLoaded: true
 			};
 		case "JOIN_TO_ROOM_ERROR":
@@ -59,10 +60,8 @@ export default (state = initialState, action) => {
 				verifyRoomLoaded: false,
 				roomData: {},
 				usersOnlineList: [],
-				usersAllList: [],
-				messages: [],
-				messagesPage: 0,
-				newMessages: 0
+				verifyRoomError: {},
+				usersAllList: []
 			};
 		case "VERIFY_ROOM":
 			return {
@@ -87,6 +86,7 @@ export default (state = initialState, action) => {
 				...state,
 				messages: [],
 				messagesPage: 0,
+				newMessages: 0,
 				messagesLoaded: false			
 			};
 		case "GET_ALL_MESSAGES_LOAD":

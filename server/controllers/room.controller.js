@@ -12,6 +12,12 @@ router.route('/create')
 	const password = req.body.password;
 	const uid = req.locals.uid;
 
+	req.checkBody("password").isLength({ min: 6, max: 999 });
+
+	const errors = req.validationErrors();
+
+	console.log(errors);
+
 	db.Room
 	.create({
 		admin_uid: uid,
@@ -53,40 +59,63 @@ router.route("/verify")
 	const uid = req.locals.uid;
 	const rid = req.query.rid;
 
-	db.Room
+	db.RoomUser
 	.findOne({
-		where: {
-			rid: rid
-		},
-		include: [{
-			model: db.RoomUser,
-			where: {
-				rid: rid
-			},
-			include: [{
-				model: db.User,
-				attributes: ['uid', 'username', 'avatar']
-			}]
-		}, {
-			model: db.RoomMessage
-		}],
-		order: [
-			[db.RoomMessage, "_createdAt", "ASC"]
-		]
+		where: { rid:rid, uid: uid}
 	})
-	.then(resRoom => {
+	.then(resRoomUserCheck => {
 
-		if(resRoom) {
-			res.status(200).send({
-				error: false,
-				room: resRoom
+		if(resRoomUserCheck) {
+
+			db.Room
+			.findOne({
+				where: {
+					rid: rid
+				},
+				include: [{
+					model: db.RoomUser,
+					where: {
+						rid: rid
+					},
+					include: [{
+						model: db.User,
+						attributes: ['uid', 'username', 'avatar']
+					}]
+				}, {
+					model: db.RoomMessage
+				}],
+				order: [
+					[db.RoomMessage, "_createdAt", "ASC"]
+				]
+			})
+			.then(resRoom => {
+
+				if(resRoom) {
+					res.status(200).send({
+						error: false,
+						room: resRoom
+					});
+				} else {
+					const error = new CustomError(202, "Room not found", req)
+					res.status(202).send({
+						error
+					});
+				}
+			})
+			.catch(err => {
+				const error = new CustomError(500, "Server error, please try again", req);
+				res.status(500).send({
+					error
+				});
 			});
+			
 		} else {
 			const error = new CustomError(202, "Room not found", req)
 			res.status(202).send({
 				error
-			});
+			});			
 		}
+
 	})
 	.catch(err => {
 		const error = new CustomError(500, "Server error, please try again", req);

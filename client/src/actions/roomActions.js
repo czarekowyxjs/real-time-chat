@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const createNewRoom = (roomName, password, token) => {
+export const createNewRoom = (roomName, password, passwordAgain, token) => {
 	return async dispatch => {
 
 		dispatch({
@@ -187,3 +187,11 @@ export const getAllMessages = (messagesPage, newMessages, rid, token) => {
 		}
 	};
 };
+
+export const returnToDefaultMessages = () => {
+	return dispatch => {
+		dispatch({
+			type: "GET_ALL_MESSAGES_BEGIN"
+		});
+	};
+}

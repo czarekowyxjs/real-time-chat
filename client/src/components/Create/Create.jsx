@@ -11,7 +11,8 @@ class Create extends React.Component {
 
 		this.state = {
 			room: '',
-			password: ''
+			password: '',
+			passwordAgain: ''
 		};
 
 		this.handleChange = this.handleChange.bind(this);
@@ -31,7 +32,7 @@ class Create extends React.Component {
 	handleSubmit(e) {
 		e.preventDefault();
 		const token = localStorage.getItem("token");
-		this.props.createNewRoom(this.state.room, this.state.password, token);
+		this.props.createNewRoom(this.state.room, this.state.password, this.state.passwordAgain, token);
 	}
 
 	render() {
@@ -53,7 +54,7 @@ class Create extends React.Component {
 							onChange={this.handleChange}
 						/>
 						<p>Name of your room, it should reflect the thematics of the room</p>
-						<label htmlFor="room">Room password</label>
+						<label htmlFor="password">Room password</label>
 						<input 
 							type="password" 
 							className="default-input"
@@ -63,6 +64,16 @@ class Create extends React.Component {
 							onChange={this.handleChange}
 						/>
 						<p>Password will be need to for other users to join to your room</p>
+						<label htmlFor="passwordAgain">Repeat password to your room</label>
+						<input 
+							type="password" 
+							className="default-input"
+							value={this.state.passwordAgain}
+							name="passwordAgain"
+							id="passwordAgain"
+							onChange={this.handleChange}
+						/>
+						<p>Passwords must be that same</p>
 						<div className="btn-wrapper">
 							<button type="submit" className="btn btn-green">Create</button>
 						</div>

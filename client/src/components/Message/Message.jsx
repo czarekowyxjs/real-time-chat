@@ -33,9 +33,7 @@ class Message extends React.Component {
 
 	render() {
 		const mess = this.props;
-		return (
-			<div className={`message-wrapper ${mess.userData.author ? "self" : "some"}`}>
-				<div className="message-author">
+		const messageAuthor = !mess.userData.author && mess.renderAvatar ? (<div className="message-author">
 					<div className="message-author-avatar">
 						<img 
 							src={FormatAvatarUrl(mess.userData.user.User.avatar)} 
@@ -46,8 +44,12 @@ class Message extends React.Component {
 							<p>{mess.userData.user.User.username}</p>
 						</div>
 					</div>
-				</div>
-				<div className="message-content">
+				</div>) : null;
+
+		return (
+			<div className={`message-wrapper ${mess.userData.author ? "self" : "some"}`}>
+				{messageAuthor}
+				<div className={`message-content ${mess.renderAvatar ? "avatar" : "empty-avatar"}`}>
 					<p>{mess.message.content}</p>
 				</div>
 			</div>
