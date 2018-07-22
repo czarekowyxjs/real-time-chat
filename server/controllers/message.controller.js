@@ -10,7 +10,7 @@ router.route("/all")
 	const page = req.query.p;
 	const rid = req.query.rid;
 	const newMessages = req.query.new;
-	const limit = 20;
+	const limit = 40;
 	const offset = (page*limit)+parseInt(newMessages);
 
 	db.RoomMessage
