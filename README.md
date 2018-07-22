@@ -61,5 +61,5 @@ $ npm start
 
 <a name="license"/>
 
-### LICENSE
+## LICENSE
 I used [MIT](https://opensource.org/licenses/MIT) license

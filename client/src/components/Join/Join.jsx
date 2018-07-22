@@ -46,9 +46,10 @@ class Join extends React.Component {
 	}
 
 	render() {
-		if(this.props.room.joinLoaded) {
+		if(this.props.room.joinLoaded && !this.props.room.joinError.status) {
 			return <Redirect to={`/room/${this.state.room}`}/>;
 		}	
+		
 		return (
 			<div className="window-wrapper">
 				<div className="room-join-form">
@@ -71,6 +72,7 @@ class Join extends React.Component {
 							id="password"
 							onChange={this.handleChange}
 						/>
+						<p>If you have already entered to this room, you don't need to enter you password.</p>
 						<div className="btn-wrapper">
 							<button type="submit" className="btn btn-green">Join</button>
 						</div>

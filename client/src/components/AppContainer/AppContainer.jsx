@@ -15,7 +15,7 @@ class AppContainer extends React.Component {
 			<div id="app-container">
 				<div id="root-app">
 					<div id="root-app-header">
-						<Navigation/>
+						<Navigation {...this.props}/>
 					</div>
 					<div id="root-app-body">
 						<Switch>

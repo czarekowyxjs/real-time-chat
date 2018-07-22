@@ -10,6 +10,12 @@
 	width:340px;
 }
 
+.room-join-form > form > p {
+	font-size:0.65rem;
+	color:#a4a4a4;
+	margin:2px;
+}
+
 .room-join-form > form > input {
 	width:100%;
 }
