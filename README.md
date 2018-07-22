@@ -1,8 +1,10 @@
 # real-time-chat
 
 ## Table of contents
-[How to run this app?](#how-to-run)
-[Technologies used](#technologies)
+* [How to run this app?](#how-to-run)
+* [Technologies used](#technologies)
+* [Application functions](#functions)
+* [License](#License)
 
 <a name="how-to-run"/>
 
@@ -48,12 +50,16 @@ $ npm start
 * [Socket.io](https://socket.io) for real time data exchange
 * [MySQL](https://www.mysql.com) as DBSM
 
+<a name="functions"/>
+
 ## Application functions
 * User authentication, login, register
 * Create and join to rooms
 * Password to room
 * Visible active users in room
 * Real time chating
+
+<a name="license"/>
 
 ### LICENSE
 I used [MIT](https://opensource.org/licenses/MIT) license
