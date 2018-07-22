@@ -1,10 +1,10 @@
 # real-time-chat
 
-## Table of contents
+#### Table of contents
 * [How to run this app?](#how-to-run)
 * [Technologies used](#technologies)
 * [Application functions](#functions)
-* [License](#License)
+* [License](#license)
 
 <a name="how-to-run"/>
 
