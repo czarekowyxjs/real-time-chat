@@ -1,7 +1,7 @@
-export default (avatarName) => {
+export default (avatarName, uid) => {
 	if(avatarName === "default-avatar.png") {
 		return '/public/images/'+avatarName;
 	} else {
-		return avatarName;
+		return '/users/'+uid+'/images/'+avatarName;
 	}
 };

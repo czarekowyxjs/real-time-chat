@@ -72,7 +72,7 @@ class Join extends React.Component {
 							id="password"
 							onChange={this.handleChange}
 						/>
-						<p>If you have already entered to this room, you don't need to enter you password.</p>
+						<p>If you have already entered to this room, you don't need to enter password.</p>
 						<div className="btn-wrapper">
 							<button type="submit" className="btn btn-green">Join</button>
 						</div>

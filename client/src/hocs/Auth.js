@@ -45,7 +45,7 @@ export const NoRequireAuth = (Component, socket) => {
 
 		render() {
 			if(!this.props.auth.loaded) {
-				return <p>Loading your data...</p>;
+				return <Component/>;
 			}
 
 			if(!this.props.auth.authError.status) {

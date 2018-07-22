@@ -29,6 +29,14 @@ body {
 	justify-content:flex-start;
 }
 
+.land-page-body {
+	width:100%;
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	justify-content:flex-start;
+}
+
 input:focus, input:active, button:focus, button:active, textarea:focus, textarea:active {
 	outline:none;
 }
@@ -76,6 +84,16 @@ textarea {
 	filter:brightness(110%);
 }
 
+.btn.btn-white {
+	color:#434343;
+	background-image:linear-gradient(#fbfbfb, #c2c2c2);
+}
+
+.btn.btn-white:hover {
+	color:#fbfbfb;
+	background-image:linear-gradient(#a4a4a4, #434343);	
+}
+
 .default-input {
 	border:none;
 	background-color:#fff;
@@ -83,13 +101,13 @@ textarea {
 	color:#434343;
 	border-radius:4px;
 	font-size:0.95rem;
-	border:1px solid rgba(0,0,0,0.12);
-	box-shadow:0px 2px 4px 0px rgba(0,0,0,0.1);
+	border:1px solid rgba(0,0,0,0.1);
+	box-shadow:0px 2px 4px 0px rgba(0,0,0,0.05);
 }
 
 .default-input:focus {
-	box-shadow:0px 0px 3px 0px #3399cc;
-	border:1px solid #0099cc;	
+	box-shadow:0px 0px 2px 0px rgba(0,0,0,0.2);
+	border:1px solid rgba(0,0,0,0.3);
 }
 
 .invisible {

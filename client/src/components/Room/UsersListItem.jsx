@@ -7,7 +7,7 @@ class UsersListItem extends Component {
 		return (
 			<div className="users-list-item">
 				<div className="users-list-item-info">
-					<img src={FormatAvatarUrl(user.User.avatar)} alt={user.User.username}/>
+					<img src={FormatAvatarUrl(user.User.avatar, user.User.uid)} alt={user.User.username}/>
 					<p>{user.User.username}</p>
 				</div>
 			</div>

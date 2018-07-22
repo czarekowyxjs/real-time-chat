@@ -1,0 +1,65 @@
+.land-page-header {
+	width:100%;
+	max-width:1024px;
+	display:flex;
+	flex-direction:row;
+	align-items:center;
+	justify-content:flex-start;
+}
+
+.land-page-logo {
+	min-width:20%;
+	min-width:150px;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	padding:16px;
+}
+
+.land-page-logo > h1 {
+	font-size:0.8rem;
+	font-weight:600;
+	color:#434343;
+	opacity:0.3;
+	cursor:pointer;
+	transition-duration:200ms;
+	text-transform:uppercase;
+}
+
+.land-page-logo > h1:hover {
+	opacity:0.7;
+}
+
+.land-page-nav {
+	width:80%;
+	display:flex;
+	flex-direction:row;
+	justify-content:flex-end;
+}
+
+.land-page-nav > nav > ul {
+	list-style-type:none;
+	display:flex;
+	flex-direction:row;
+}
+
+.land-page-nav > nav > ul > li {
+
+}
+
+.land-page-nav > nav > ul > li > a {
+	color:#434343;
+	text-decoration:none;
+	margin:0px 5px;
+	font-size:0.8rem;
+	opacity:0.6;
+	transition-duration:200ms;
+}
+
+.land-page-nav > nav > ul > li > a:hover {
+	opacity:0.9;
+}
+
+.land-page-nav > nav > ul > li > a.activeLandNav {
+	opacity:1;
+}

@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import { Op } from 'sequelize';
+import mkdirp from 'mkdirp';
 import CustomError from '../helpers/CustomError';
 import db from '../models';
 
@@ -23,21 +25,38 @@ router.route('/login')
 
 		if(resUser) {
 
-			db.Token
-			.create({
-				uid: resUser.uid
+			db.Token.findOne({
+				where: {
+					uid: resUser.uid
+				}
 			})
-			.then(resToken => {
-				res.status(200);
-				res.send({
-					user: resUser,
-					token: resToken
-				});					
+			.then(resCheckToken => {
+
+				if(!resCheckToken) {
+					db.Token
+					.create({
+						uid: resUser.uid
+					})
+					.then(resToken => {
+						res.status(200);
+						res.send({
+							user: resUser,
+							token: resToken
+						});					
+					})
+					.catch(err => {
+						const error = new CustomError(500, "Server error, please try again", req);
+						res.status(500);
+						res.send({
+							error
+						});
+					});
+				}
+
 			})
 			.catch(err => {
-				const error = new CustomError(500, "Invalid username or password", req);
-				res.status(500);
-				res.send({
+				const error = new CustomError(500, "Server error, please try again", req);
+				res.status(500).send({
 					error
 				});
 			});
@@ -57,6 +76,77 @@ router.route('/login')
 			error
 		});
 	});
+});
+
+router.route("/register")
+.post((req, res) => {
+	
+	req.checkBody("username", "Invalid username").trim().isLength({ min: 2, max: 24});
+	req.checkBody("email", "Invalid email address").trim().isEmail();
+	req.checkBody("password", "Invalid password").trim().isLength({ min: 6, max: 999});
+	req.checkBody("passwordAgain", "Invalid password again").equals(req.body.password);
+
+	const errors = req.validationErrors();
+
+	if(!errors) {
+
+		db.User
+		.findOne({
+			where: {
+				[Op.or]: [{ username: req.body.username }, { email: req.body.email }]
+			}
+		})
+		.then(resCheckUser => {
+			if(resCheckUser) {
+
+				const error = new CustomError(202, "Username is busy", req);
+				res.status(202).send({
+					error
+				});
+
+			} else {
+
+				db.User
+				.create({
+					username: req.body.username,
+					email: req.body.email,
+					password: req.body.password
+				})
+				.then(resCreateUser => {
+					const uid = resCreateUser.uid;
+
+					mkdirp('./users/'+uid+'/images');
+
+					res.status(200).send({
+						error: false,
+						user: resCreateUser
+					});
+
+				})
+				.catch(err => {
+					const error = new CustomError(500, "Server error, please try again", req);
+					res.status(500).send({
+						error: error
+					});
+				});
+
+			}
+		})
+		.catch(err => {
+			const error = new CustomError(500, "Server error, please try again", req);
+			res.status(500).send({
+				error: error
+			});
+		});
+
+	} else {
+		const error = new CustomError(202, "Invalid data", req);
+		res.status(202).send({
+			errors,
+			error
+		});
+	}
+
 });
 
 router.route("/logout")
@@ -116,8 +206,7 @@ router.route("/authorization")
 	})
 	.catch(err => {
 		const error = new CustomError(500, "Server error, please try again", req);
-		res.status(500);
-		res.send({
+		res.status(500).send({
 			error: error
 		});
 	});

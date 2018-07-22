@@ -47,7 +47,7 @@ class Message extends React.Component {
 		const messageAuthor = !mess.userData.author && mess.renderAvatar ? (<div className="message-author">
 					<div className="message-author-avatar">
 						<img 
-							src={FormatAvatarUrl(mess.userData.user.User.avatar)} 
+							src={FormatAvatarUrl(mess.userData.user.User.avatar, mess.userData.user.User.uid)} 
 							alt={mess.userData.user.User.username}
 							onMouseEnter={(e) => this.handleMouseEnter(e, "avatar")}
 							onMouseLeave={(e) => this.handleMouseLeave(e, "avatar")}/>
