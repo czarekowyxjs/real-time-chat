@@ -36,6 +36,7 @@
 	max-width:80%;
 	padding:4px 7px;
 	border-radius:10px;
+	position:relative;
 }
 
 .message-content.empty-avatar {
@@ -84,4 +85,51 @@
 
 .message-author-hover.hide {
 	display:none;
+}
+
+.message-created {
+	position:absolute;
+	top:0px;
+	z-index:10;
+	height:100%;
+	display:flex;
+	align-items:center;
+	justify-content:flex-end;
+	width:200px;
+}
+
+.message-created > p {
+	color:#fbfbfb;
+	font-size:0.8rem;
+	font-weight:400;
+	background-color:#434343;
+	padding:5px 6px;
+	border-radius:3px;
+}
+
+.message-wrapper.self .message-created {
+	right:100%;
+	margin-right:2px;
+	flex-direction:row;
+} 
+
+.message-wrapper.some .message-created {
+	left:100%;
+	margin-left:2px;
+	flex-direction:row-reverse;
+}
+
+.message-created-triangle {
+	height:0;
+	width:0;
+	border-top:5px solid transparent;
+	border-bottom:5px solid transparent;
+}
+
+.message-wrapper.self .message-created .message-created-triangle {
+	border-left:7px solid #434343;
+}
+
+.message-wrapper.some .message-created .message-created-triangle {
+	border-right:7px solid #434343;
 }

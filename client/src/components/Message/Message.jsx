@@ -1,5 +1,6 @@
 import React from 'react';
 import FormatAvatarUrl from '../../helpers/FormatAvatarUrl';
+import FormatUnixTime from '../../helpers/FormatUnixTime';
 
 import "./Message.css";
 
@@ -8,27 +9,37 @@ class Message extends React.Component {
 		super(props);
 
 		this.state = {
-			visibilityPopUp: false
+			visibilityPopUp: false,
+			visibilityCreated: false
 		};
 
 
 		this.handleMouseEnter = this.handleMouseEnter.bind(this);
 		this.handleMouseLeave = this.handleMouseLeave.bind(this);
 	}
-	componentDidMount() {
 
+	handleMouseEnter(e, type) {
+		if(type === "avatar") {
+			this.setState({
+				visibilityPopUp: true
+			});
+		} else if(type === "created") {
+			this.setState({
+				visibilityCreated: true
+			});			
+		}
 	}
 
-	handleMouseEnter(e) {
-		this.setState({
-			visibilityPopUp: true
-		});
-	}
-
-	handleMouseLeave(e) {
-		this.setState({
-			visibilityPopUp: false
-		});
+	handleMouseLeave(e, type) {
+		if(type === "avatar") {
+			this.setState({
+				visibilityPopUp: false
+			});
+		} else if(type === "created") {
+			this.setState({
+				visibilityCreated: false
+			});			
+		}
 	}
 
 	render() {
@@ -38,8 +49,8 @@ class Message extends React.Component {
 						<img 
 							src={FormatAvatarUrl(mess.userData.user.User.avatar)} 
 							alt={mess.userData.user.User.username}
-							onMouseEnter={this.handleMouseEnter}
-							onMouseLeave={this.handleMouseLeave}/>
+							onMouseEnter={(e) => this.handleMouseEnter(e, "avatar")}
+							onMouseLeave={(e) => this.handleMouseLeave(e, "avatar")}/>
 						<div className={`message-author-hover ${this.state.visibilityPopUp ? "show" : "hide"}`}>
 							<p>{mess.userData.user.User.username}</p>
 						</div>
@@ -49,8 +60,15 @@ class Message extends React.Component {
 		return (
 			<div className={`message-wrapper ${mess.userData.author ? "self" : "some"}`}>
 				{messageAuthor}
-				<div className={`message-content ${mess.renderAvatar ? "avatar" : "empty-avatar"}`}>
+				<div 
+				className={`message-content ${mess.renderAvatar ? "avatar" : "empty-avatar"}`}
+				onMouseEnter={(e) => this.handleMouseEnter(e, "created")}
+				onMouseLeave={(e) => this.handleMouseLeave(e, "created")}>
 					<p>{mess.message.content}</p>
+					<div className={this.state.visibilityCreated ? "message-created" : "invisible"}>
+						<p>{FormatUnixTime(mess.message._createdAt)}</p>
+						<div className="message-created-triangle"></div>
+					</div>
 				</div>
 			</div>
 		);
