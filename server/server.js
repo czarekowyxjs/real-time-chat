@@ -91,25 +91,19 @@ io.on("connection", socket => {
 	socket.on('sendMessage', data => {
 
 		if(data.message.length > 0 && data.message.length < 999) {
-
 			db.RoomMessage
 			.create({ rid: data.rid, uid: data.uid, content: data.message })
 			.then(resRoomMessage => {
-
 				if(resRoomMessage) {
-
 					io.to(data.rid).emit("newMessage", {
 						message: resRoomMessage
 					});
-					
 				}
-
 			})
 			.catch(err => {
 
 			});
 		}
-
 	});
 
 	// when user leave room

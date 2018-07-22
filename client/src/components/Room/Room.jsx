@@ -26,6 +26,7 @@ class Room extends React.Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.handleKeyPress = this.handleKeyPress.bind(this);
 		this.handleScroll = this.handleScroll.bind(this);
+		this.sendMessage = this.sendMessage.bind(this);
 		this.renderMessages = this.renderMessages.bind(this);
 		this.leaveRoom = this.leaveRoom.bind(this);
 
@@ -97,18 +98,7 @@ class Room extends React.Component {
 	handleKeyPress(e) {
 		if(e.key === "Enter") {
 			e.preventDefault();
-			if(this.state.message.length > 0 && this.state.message.length < 999) {
-				socket.emit("sendMessage", {
-					uid: this.props.user.user.uid,
-					rid: this.props.room.roomData.rid,
-					message: this.state.message
-				});
-
-				this.setState({
-					message: ''
-				});
-
-			}
+			this.sendMessage();
 		}
 	}
 
@@ -121,6 +111,20 @@ class Room extends React.Component {
 			}
 		} else {
 			e.preventDefault();
+		}
+	}
+
+	sendMessage() {
+		if(this.state.message.length > 0 && this.state.message.length < 999) {
+			socket.emit("sendMessage", {
+				uid: this.props.user.user.uid,
+				rid: this.props.room.roomData.rid,
+				message: this.state.message
+			});
+
+			this.setState({
+				message: ''
+			});
 		}
 	}
 
@@ -178,14 +182,19 @@ class Room extends React.Component {
 								{this.renderMessages()}
 							</div>
 							<div className="chat-app-input">
-								<textarea
-									name="message"
-									id="message"
-									value={this.state.message}
-									onChange={this.handleChange}
-									onKeyPress={this.handleKeyPress}
-								></textarea>
-								<label htmlFor="message" className={this.state.message.length > 0 ? "invisible" : null}>Type your message...</label>
+								<div className="app-input-mess">
+									<textarea
+										name="message"
+										id="message"
+										value={this.state.message}
+										onChange={this.handleChange}
+										onKeyPress={this.handleKeyPress}
+									></textarea>
+									<label htmlFor="message" className={this.state.message.length > 0 ? "invisible" : null}>Type your message...</label>
+								</div>
+								<div className={this.state.message.length > 0 ? "app-input-send" : "invisible"}>
+									<p onClick={this.sendMessage}>Send</p>
+								</div>
 							</div>
 						</div>
 					</div>
