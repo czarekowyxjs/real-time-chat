@@ -2,8 +2,10 @@
 
 ## Table of contents
 [How to run this app?](#how-to-run)
+[Technologies used](#technologies)
 
 <a name="how-to-run"/>
+
 ## How to run this app locally?
 1. Firstly download repository
 ```
@@ -34,6 +36,8 @@ $ cd client
 $ npm start
 ```
 5. It's working!
+
+<a name="technologies"/>
 
 ## Technologies used
 * [Express.js](https://expressjs.com) for backend
