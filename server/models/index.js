@@ -4,6 +4,7 @@ import Room from './Room';
 import RoomUser from './RoomUser';
 import RoomUserOnline from './RoomUserOnline';
 import RoomMessage from './RoomMessage';
+import RoomBanned from './RoomBanned';
 
 Token.belongsTo(User, { foreignKey: 'uid' });
 User.hasOne(Token, { foreignKey: 'uid' });
@@ -26,5 +27,6 @@ export default {
 	Room,
 	RoomUser,
 	RoomUserOnline,
-	RoomMessage
+	RoomMessage,
+	RoomBanned
 };

@@ -1,0 +1,36 @@
+.error-root {
+	width:100%;
+	height:100%;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+}
+
+.error-wrapper {
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	justify-content:center;
+}
+
+.error-title > h1 {
+	font-size:2.5rem;
+	color:#434343;
+}
+
+.error-body > p {
+	font-size:1.2rem;
+	color:rgba(0,0,0,0.7);
+}
+
+.error-back > button {
+	background:none;
+	border:none;
+	color:#006699;
+	cursor:pointer;
+	font-size:0.9rem;
+}
+
+.error-back > button:hover {
+	text-decoration:underline;
+}

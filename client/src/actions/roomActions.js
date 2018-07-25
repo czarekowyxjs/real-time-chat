@@ -193,3 +193,71 @@ export const returnToDefaultMessages = () => {
 		});
 	};
 }
+
+export const activeCLIMode = () => {
+	return dispatch => dispatch({
+		type: "ACTIVE_CLI"
+	});
+};
+
+export const disableCLIMode = () => {
+	return dispatch => dispatch({
+		type: "DISABLE_CLI"
+	});
+};
+
+export const executeCLICommand = (command, rid, token) => {
+	return async dispatch => {
+		try {
+			const response = await axios.post("/api/room/cli", {
+				command: command,
+				rid: rid
+			}, {
+				headers: {
+					'Content-Type': 'application/json', 
+					'authorization': token
+				}
+			});
+
+			let message;
+
+			if(response.status === 202) {
+
+				message = {
+					mid: Math.floor(new Date().getTime()),
+					uid: 'cli',
+					rid: rid,
+					content: response.data.error.message
+				};
+
+				dispatch({
+					type: "RES_CLI_ERR",
+					message: message
+				});
+
+			} else if(response.status === 200) {
+
+				message = {
+					mid: Math.floor(new Date().getTime()),
+					uid: 'cli',
+					rid: rid,
+					content: response.data.message
+				};
+
+				dispatch({
+					type: "RES_CLI",
+					message: message
+				});
+			}
+
+		} catch(e) {
+			console.log(e.response);
+		}
+	};
+};
+
+export const returnAddedCLI = () => {
+	return dispatch => dispatch({
+		type: "RETURN_CLI"
+	});
+};

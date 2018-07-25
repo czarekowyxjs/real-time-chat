@@ -12,7 +12,9 @@ const initialState = {
 	messagesPage: 0,
 	newMessages: 0,
 	messagesLoaded: false,
-	usersOnlineList: []
+	usersOnlineList: [],
+	activeCLI: false,
+	addedCLI: false
 };
 
 export default (state = initialState, action) => {
@@ -61,7 +63,9 @@ export default (state = initialState, action) => {
 				roomData: {},
 				usersOnlineList: [],
 				verifyRoomError: {},
-				usersAllList: []
+				usersAllList: [],
+				activeCLI: false,
+				addedCLI: false
 			};
 		case "VERIFY_ROOM":
 			return {
@@ -107,6 +111,55 @@ export default (state = initialState, action) => {
 				...state,
 				messages: action.messages,
 				newMessages: state.newMessages+1
+			};
+		case "ACTIVE_CLI":
+			let activeMess = state.messages;
+			activeMess.push({
+				mid: Math.floor(new Date().getTime()),
+				uid: "cli",
+				rid: state.roomData.rid,
+				content: 'Command line is running',
+			});
+			return {
+				...state,
+				messages: activeMess,
+				addedCLI: true,
+				activeCLI: true
+			};
+		case "DISABLE_CLI":
+			let disableMess = state.messages;
+			disableMess.push({
+				mid: Math.floor(new Date().getTime()),
+				uid: "cli",
+				rid: state.roomData.rid,
+				content: 'Command line is disabled',
+			});
+			return {
+				...state,
+				addedCLI: true,
+				activeCLI: false,
+				messages: disableMess
+			};
+		case "RES_CLI":
+		let succMess = state.messages;
+		succMess.push(action.message);
+			return {
+				...state,
+				messages: succMess,
+				addedCLI: true
+			};
+		case "RES_CLI_ERR":
+			let errMess = state.messages;
+			errMess.push(action.message);
+			return {
+				...state,
+				messages: errMess,
+				addedCLI: true
+			};
+		case "RETURN_CLI":
+			return {
+				...state,
+				addedCLI: false
 			};
 		default:
 			return state;

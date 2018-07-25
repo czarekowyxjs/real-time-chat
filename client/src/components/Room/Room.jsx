@@ -2,9 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import socket_io from 'socket.io-client';
-import { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList, pushMessage, getAllMessages, returnToDefaultMessages } from '../../actions/roomActions';
+import { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList, pushMessage, getAllMessages, returnToDefaultMessages, activeCLIMode, disableCLIMode, executeCLICommand, returnAddedCLI } from '../../actions/roomActions';
 import Message from '../Message/Message.jsx';
 import UsersList from './UsersList.jsx';
+import InvitationLink from './InvitationLink.jsx';
+import Error from '../Error/Error.jsx';
 
 import "./Room.css";
 
@@ -16,7 +18,8 @@ class Room extends React.Component {
 
 		this.state = {
 			message: '',
-			first: false
+			first: false,
+			visibilityInvitationLink: false
 		};
 
 		socket = socket_io("http://localhost:3001");
@@ -29,6 +32,7 @@ class Room extends React.Component {
 		this.sendMessage = this.sendMessage.bind(this);
 		this.renderMessages = this.renderMessages.bind(this);
 		this.leaveRoom = this.leaveRoom.bind(this);
+		this.toggleInvitationLink = this.toggleInvitationLink.bind(this);
 
 		// refs
 		this.chatMessagesRef = React.createRef();
@@ -43,6 +47,16 @@ class Room extends React.Component {
 	componentDidMount() {
 		this.verifyRoom();
 		this.getAllMessages();
+	}
+
+	componentDidUpdate() {
+		if(this.props.room.addedCLI) {
+			this.chatMessagesRef.current.scrollTop = this.chatMessagesRef.current.scrollHeight-this.chatMessagesRef.current.offsetHeight;
+			this.setState({
+				message: ''
+			});
+			this.props.returnAddedCLI();
+		}
 	}
 
 	leaveRoom() {
@@ -115,7 +129,26 @@ class Room extends React.Component {
 	}
 
 	sendMessage() {
-		if(this.state.message.length > 0 && this.state.message.length < 999) {
+		if(this.state.message === "/cli run") {
+			this.setState({
+				message: ''
+			}, this.props.activeCLIMode);
+			return;
+		}
+
+		if(this.state.message === "/cli exit") {
+			this.setState({
+				message: ''
+			}, this.props.disableCLIMode);
+			return;
+		}
+
+		if(this.props.room.activeCLI) {
+			const token = localStorage.getItem("token");
+			this.props.executeCLICommand(this.state.message, this.props.room.roomData.rid, token);
+		}
+
+		if(this.state.message.length > 0 && this.state.message.length < 999 && !this.props.room.activeCLI) {
 			socket.emit("sendMessage", {
 				uid: this.props.user.user.uid,
 				rid: this.props.room.roomData.rid,
@@ -126,6 +159,14 @@ class Room extends React.Component {
 				message: ''
 			});
 		}
+	}
+
+	toggleInvitationLink() {
+		const visibilityInvitationLink = this.state.visibilityInvitationLink ? false : true;
+
+		this.setState({
+			visibilityInvitationLink: visibilityInvitationLink
+		});
 	}
 
 	renderMessages() {
@@ -167,12 +208,13 @@ class Room extends React.Component {
 			return <p>Loading...</p>;
 		}
 		if(this.props.room.verifyRoomError.status) {
-			return <Redirect to="/join"/>;
+			return <Error {...this.props} err={this.props.room.verifyRoomError}/>;
 		}
 
 		const room = this.props.room;
 		return (
 			<div id="room-root">
+				{this.state.visibilityInvitationLink ? <InvitationLink rid={room.roomData.rid} close={this.toggleInvitationLink}/> : null}
 				<div className="room-root-app-side">
 					<div className="room-header">
 					</div>
@@ -202,12 +244,15 @@ class Room extends React.Component {
 				<div className="room-root-aside">
 					<div className="room-root-aside-content">
 						<div className="room-aside-title">
-							<div>
+							<div className="room-aside-title-invite">
+								<button type="submit" onClick={this.toggleInvitationLink}>Get invitation link</button>
+							</div>
+							<div className="room-aside-title-data">
 								<h2>{room.roomData.room_name}</h2>
 								<p>{`#${room.roomData.rid}`}</p>
 							</div>
 						</div>
-						<UsersList allUsers={room.usersAllList} onlineUsers={room.usersOnlineList}/>
+						<UsersList roomData={room.roomData} allUsers={room.usersAllList} onlineUsers={room.usersOnlineList}/>
 					</div>
 					<div className="room-root-aside-footer">
 						<div className="room-aside-leave">
@@ -229,4 +274,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default connect(mapStateToProps, { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList, pushMessage, getAllMessages, returnToDefaultMessages })(Room);
+export default connect(mapStateToProps, { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList, pushMessage, getAllMessages, returnToDefaultMessages, activeCLIMode, disableCLIMode, executeCLICommand, returnAddedCLI })(Room);

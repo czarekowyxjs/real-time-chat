@@ -8,7 +8,7 @@
 }
 
 .room-root-app-side {
-	width:80%;
+	width:100%;
 	height:100%;
 	display:flex;
 	flex-direction:column;
@@ -17,7 +17,8 @@
 }
 
 .room-root-aside {
-	width:20%;
+	width:30%;
+	max-width:300px;
 	min-width:180px;
 	height:100%;
 	background-color:#262626;
@@ -42,17 +43,42 @@
 .room-aside-title {
 	width:100%;
 	display:flex;
-	flex-direction:row;
-	padding:14px 0px 8px 14px;
+	flex-direction:column;
 }
 
-.room-aside-title > div > h2 {
+.room-aside-title-invite {
+	width:100%;
+}
+
+.room-aside-title-invite > button {
+	width:100%;
+	background:none;
+	border:none;
+	background-color:#ff6633;
+	padding:6px;
+	font-size:0.7rem;
+	font-weight:600;
+	color:#fff;
+	cursor:pointer;
+	border-bottom:1px solid rgba(255,255,255,0.4);
+	transition-duration:150ms;
+}
+
+.room-aside-title-invite > button:hover {
+	background-color:#cc3300;
+}
+
+.room-aside-title-data {
+	margin:8px 0px 4px 16px;
+}
+
+.room-aside-title-data > h2 {
 	font-size:1.4rem;
 	font-weight:600;
 	color:#fbfbfb;
 }
 
-.room-aside-title > div > p {
+.room-aside-title-data > p {
 	margin-top:0px;
 	font-size:0.9rem;
 	font-weight:400;

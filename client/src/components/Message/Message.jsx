@@ -66,7 +66,7 @@ class Message extends React.Component {
 				onMouseLeave={(e) => this.handleMouseLeave(e, "created")}>
 					<p>{mess.message.content}</p>
 					<div className={this.state.visibilityCreated ? "message-created" : "invisible"}>
-						<p>{FormatUnixTime(mess.message._createdAt)}</p>
+						<p>{mess.message.uid !== "cli" ? FormatUnixTime(mess.message._createdAt) : "command line"}</p>
 						<div className="message-created-triangle"></div>
 					</div>
 				</div>

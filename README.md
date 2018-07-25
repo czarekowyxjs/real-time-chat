@@ -3,7 +3,7 @@
 #### Table of contents
 * [How to run this app?](#how-to-run)
 * [Technologies used](#technologies)
-* [Application functions](#functions)
+* [Features](#features)
 * [License](#license)
 
 <a name="how-to-run"/>
@@ -26,7 +26,7 @@ $ cd client
 $ npm install
 $ cd ..
 ```
-4. So, if you want to start app, you need database. In downloaded repository is `real-time-chat.sql` file. It's best to use phpmyadmin to import this file.
+4. So, if you want to start app, you need database. In downloaded repository is `real-time-chat.sql` file. It's best to use phpmyadmin to import this file. And you should edit `./server/config/server.conf.js` and `./client/src/config/config.js` files.
 Finally to run app, you must start two processes(client and server) in two different terminals
 ```
 $ cd server
@@ -50,9 +50,9 @@ $ npm start
 * [Socket.io v.2.1.1](https://socket.io) for real time data exchange
 * [MySQL](https://www.mysql.com) as DBSM, [mysql2 v.1.5.3](https://www.npmjs.com/package/mysql2) module for nodejs
 
-<a name="functions"/>
+<a name="features"/>
 
-## Application functions
+## Features
 * User authentication, login, register
 * Create and join to rooms
 * Password to room

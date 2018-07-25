@@ -1,0 +1,40 @@
+.invitation-link-wrapper {
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	background-color:rgba(0,0,0,0.4);
+	z-index:10;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+}
+
+.invitation-link-wrapper > div {
+	background-color:#fbfbfb;
+	width:30%;
+	max-width:400px;
+	min-width:200px;
+	border-radius:4px;
+	border:1px solid rgba(0,0,0,0.5);
+	box-shadow:0px 1px 15px 0px rgba(0,0,0,0.2);
+	padding:8px;
+}
+
+.invitation-link-wrapper > div > h4 {
+	color:#434343;
+	font-size:0.8rem;
+	font-weight:600;
+	margin-bottom:10px;
+}
+
+.invitation-link-wrapper > div > input {
+	width:100%;
+}
+
+.invitation-link-wrapper > div > p {
+	margin:6px 0px;
+	font-size:0.65rem;
+	color:#a4a4a4;
+}
