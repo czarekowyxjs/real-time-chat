@@ -1,5 +1,6 @@
 # real-time-chat
 
+click on the images to see in better quality
 ![real time chat images](https://i.imgur.com/6LfrGyB.gif)
 
 #### Table of contents
