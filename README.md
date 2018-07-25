@@ -4,6 +4,7 @@
 * [How to run this app?](#how-to-run)
 * [Technologies used](#technologies)
 * [Features](#features)
+* [Command line](#cli)
 * [License](#license)
 
 <a name="how-to-run"/>
@@ -60,6 +61,21 @@ $ npm start
 * Real time chating
 * Messages load on scroll up in group conversation
 * Avatars, possible change of avatar
+* Room admin - can ban and unban
+* Invite to chat room by link
+* Command line
+
+<a name="cli"/>
+
+## Command line
+
+Only chat room admin can use command line. Command line is working in message input.
+When command line is active, you can't send messages.
+* `/cli run` - it's starting command line
+* `/cli exit` - it's closing command line
+* `/cli -p newPassword newPasswordAgain` - by this command, you can change password to your room
+* `/cli -ban username` - by this command, you can ban different users in your room
+* `/cli -unban username` - by this command, you can unban users which you banned
 
 <a name="license"/>
 
