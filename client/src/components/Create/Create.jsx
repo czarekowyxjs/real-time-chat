@@ -19,6 +19,10 @@ class Create extends React.Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
+	componentDidMount() {
+		document.title = "Creating new room"
+	}
+
 	componentWillUnmount() {
 		this.props.returnToDefaultCreateRoom();
 	}

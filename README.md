@@ -1,5 +1,7 @@
 # real-time-chat
 
+![real time chat images](https://i.imgur.com/8XegiET.gif)
+
 #### Table of contents
 * [How to run this app?](#how-to-run)
 * [Technologies used](#technologies)
@@ -28,7 +30,7 @@ $ cd client
 $ npm install
 $ cd ..
 ```
-4. So, if you want to start app, you need database. In downloaded repository is `real-time-chat.sql` file. It's best to use phpmyadmin to import this file. And you should edit `./server/config/server.conf.js` and `./client/src/config/config.js` files.
+4. So, if you want to start app, you need database. In downloaded repository is `real-time-chat.sql` file. It's best to use phpmyadmin to import this file(Remeber, before you import this file, firstly you must create database, and import this file into created database). And you should edit `./server/config/server.conf.js` and `./client/src/config/config.js` files.
 Finally to run app, you must start two processes(client and server) in two different terminals
 ```
 $ cd server

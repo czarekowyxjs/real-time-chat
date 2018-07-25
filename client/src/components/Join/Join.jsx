@@ -23,6 +23,7 @@ class Join extends React.Component {
 	}
 
 	componentDidMount() {
+		document.title = "Join to new room!";
 		if(this.props.match.params.rid) {
 			this.setState({
 				room: this.props.match.params.rid
