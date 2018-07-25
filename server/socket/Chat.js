@@ -39,11 +39,11 @@ class Chat {
 					});
 				})
 				.catch(err => {
-
+					console.log(err);
 				});
 			})
 			.catch(err => {
-
+				console.log(err);
 			});
 		});
 	}
@@ -75,51 +75,41 @@ class Chat {
 		this.socket.on("disconnect", () => {
 			this.db.RoomUserOnline
 			.findOne({
-				where: {
-					socket: this.socket.id
-				}
+				where: { socket: this.socket.id }
 			})
 			.then(resOnlineUser => {
 				if(resOnlineUser) {
 					this.db.RoomUserOnline
 					.destroy({
-						where: {
-							socket: this.socket.id
-						}
+						where: { socket: this.socket.id }
 					})
 					.then(resRoomUserOnline => {
 						this.db.RoomUserOnline
 						.findAll({
-							where: {
-								rid: resOnlineUser.rid
-							},
-							order: [
-								['_createdAt', 'DESC']
-							],
+							where: { rid: resOnlineUser.rid },
+							order: [['_createdAt', 'DESC']],
 							include: [{
 								model: this.db.User,
 								attributes: ['uid', 'username', "avatar"]
 							}]
 						})
 						.then(resRoomUserOnlineAll => {
-							
 							this.socket.leave(resOnlineUser.rid);
 							this.io.to(resOnlineUser.rid).emit("updateUsersList", {
 								users: resRoomUserOnlineAll
 							});
-
 						})
 						.catch(err => {
-
+							console.log(err);
 						});
 					})
 					.catch(err => {
-
+						console.log(err);
 					});				
 				}
 			})
 			.catch(err => {
-
+				console.log(err);
 			});
 		});		
 	}
