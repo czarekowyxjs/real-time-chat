@@ -5,6 +5,7 @@
 * [Technologies used](#technologies)
 * [Features](#features)
 * [Command line](#cli)
+* [In the future](#future)
 * [License](#license)
 
 <a name="how-to-run"/>
@@ -64,6 +65,7 @@ $ npm start
 * Avatars, possible change of avatar
 * Room admin - can ban and unban
 * Invite to chat room by link
+* Real time preview of your rooms
 * Command line
 
 <a name="cli"/>
@@ -77,6 +79,14 @@ When command line is active, you can't send messages.
 * `/cli -p newPassword newPasswordAgain` - by this command, you can change password to your room
 * `/cli -ban username` - by this command, you can ban different users in your room
 * `/cli -unban username` - by this command, you can unban users which you banned
+
+<a name="future"/>
+
+## In the future
+* Private messages
+* Expansion of command line
+* Profile view
+* ...
 
 <a name="license"/>
 
