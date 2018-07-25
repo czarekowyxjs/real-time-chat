@@ -42,13 +42,13 @@ $ npm start
 <a name="technologies"/>
 
 ## Technologies used
-* [Express.js](https://expressjs.com) for backend
-* [Sequelize.js](http://docs.sequelizejs.com) for database models and building queries
-* [React.js](https://reactjs.org), [React-router](https://github.com/ReactTraining/react-router) for best UX
-* [Redux](https://redux.js.org) to store data
-* [Axios](https://github.com/axios/axios), [Redux-thunk](https://github.com/reduxjs/redux-thunk) for asonchrynus requests
-* [Socket.io](https://socket.io) for real time data exchange
-* [MySQL](https://www.mysql.com) as DBSM
+* [Express.js v.4.16.3](https://expressjs.com) for backend
+* [Sequelize.js v.4.38.0](http://docs.sequelizejs.com) for database models and building queries
+* [React.js](https://reactjs.org) - [create-react-app](https://github.com/facebook/create-react-app), [React-router](https://github.com/ReactTraining/react-router) for best UX
+* [Redux v.4.0](https://redux.js.org) to store data
+* [Axios v.0.18.0](https://github.com/axios/axios), [Redux-thunk](https://github.com/reduxjs/redux-thunk) for asonchrynus requests
+* [Socket.io v.2.1.1](https://socket.io) for real time data exchange
+* [MySQL](https://www.mysql.com) as DBSM, [mysql2 v.1.5.3](https://www.npmjs.com/package/mysql2) module for nodejs
 
 <a name="functions"/>
 
@@ -58,6 +58,8 @@ $ npm start
 * Password to room
 * Visible active users in room
 * Real time chating
+* Messages load on scroll up in group conversation
+* Avatars, possible change of avatar
 
 <a name="license"/>
 
