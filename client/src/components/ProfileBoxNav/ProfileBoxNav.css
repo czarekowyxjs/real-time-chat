@@ -15,8 +15,8 @@
 }
 
 .profile-box-user > img {
-	width:28px;
-	height:28px;
+	width:32px;
+	height:32px;
 	border-radius:100%;
 }
 
@@ -50,7 +50,6 @@
 	font-size:0.65rem;
 	cursor:pointer;
 	font-weight:400;
-	margin-top:-3px;
 }
 
 .profile-box-user-nick > label:hover {
