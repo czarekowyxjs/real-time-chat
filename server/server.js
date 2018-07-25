@@ -21,6 +21,12 @@ import AuthController from './controllers/auth.controller';
 import RoomController from './controllers/room.controller';
 import MessageController from './controllers/message.controller';
 
+// socket.io chat controller
+import Chat from './socket/Chat';
+
+// it will be chat instance
+let chat;
+
 // init server
 const app = express();
 
@@ -47,118 +53,8 @@ const io = socket_io.listen(server);
 
 io.on("connection", socket => {
 	
-	// join to room
-	socket.on('joinToRoom', data => {
+	chat = new Chat(io, socket, db);
 
-		db.RoomUserOnline
-		.create({
-			uid: data.user.uid,
-			rid: data.rid,
-			socket: socket.id
-		})
-		.then(resRoomUserOnline => {
-
-			db.RoomUserOnline
-			.findAll({
-				where: {
-					rid: data.rid
-				},
-				order: [
-					['_createdAt', 'DESC']
-				],
-				include: [{
-					model: db.User,
-					attributes: ['uid', 'username', "avatar"]
-				}]
-			})
-			.then(resRoomUserOnlineAll => {
-
-				socket.join(data.rid);
-				io.to(data.rid).emit("updateUsersList", {
-					users: resRoomUserOnlineAll
-				});
-
-			})
-			.catch(err => {
-
-			});
-
-		})
-		.catch(err => {
-
-		});
-	});
-
-	//messages
-	socket.on('sendMessage', data => {
-
-		if(data.message.length > 0 && data.message.length < 999) {
-			db.RoomMessage
-			.create({ rid: data.rid, uid: data.uid, content: data.message })
-			.then(resRoomMessage => {
-				if(resRoomMessage) {
-					io.to(data.rid).emit("newMessage", {
-						message: resRoomMessage
-					});
-				}
-			})
-			.catch(err => {
-
-			});
-		}
-	});
-
-	// when user leave room
-	socket.on("disconnect", () => {
-		db.RoomUserOnline
-		.findOne({
-			where: {
-				socket: socket.id
-			}
-		})
-		.then(resOnlineUser => {
-			if(resOnlineUser) {
-				db.RoomUserOnline
-				.destroy({
-					where: {
-						socket: socket.id
-					}
-				})
-				.then(resRoomUserOnline => {
-					db.RoomUserOnline
-					.findAll({
-						where: {
-							rid: resOnlineUser.rid
-						},
-						order: [
-							['_createdAt', 'DESC']
-						],
-						include: [{
-							model: db.User,
-							attributes: ['uid', 'username', "avatar"]
-						}]
-					})
-					.then(resRoomUserOnlineAll => {
-						
-						socket.leave(resOnlineUser.rid);
-						io.to(resOnlineUser.rid).emit("updateUsersList", {
-							users: resRoomUserOnlineAll
-						});
-
-					})
-					.catch(err => {
-
-					});
-				})
-				.catch(err => {
-
-				});				
-			}
-		})
-		.catch(err => {
-
-		});
-	});
 });
 
 // start server

@@ -14,6 +14,13 @@ class UsersList extends Component {
 		const onlineUsers = this.props.onlineUsers;
 
 		return onlineUsers.map((key, index) => {
+
+			for(let i = 0;i < index;++i) {
+				if(onlineUsers[i].uid === key.uid) {
+					return null;
+				}
+			}
+
 			return <UsersListItem key={key.uid} user={key}/>;
 		});
 	}
