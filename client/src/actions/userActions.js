@@ -4,7 +4,6 @@ export const changeAvatar = (file, token) => {
 	return async dispatch => {
 		if(file.size < 100000) {
 			try {
-
 				const response = await axios.post("/api/user/avatar", {
 					file: file
 				}, {
@@ -27,4 +26,11 @@ export const changeAvatar = (file, token) => {
 			}
 		}
 	};
+};
+
+export const updateRoomsList = (rooms) => {
+	return dispatch => dispatch({
+		type: "UPDATE_USER_ROOMS_LIST",
+		rooms: rooms
+	});
 };

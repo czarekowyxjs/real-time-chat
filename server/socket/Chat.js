@@ -5,7 +5,6 @@ class Chat {
 		this.db = db;
 
 		this.initHandlers();
-
 	}
 
 	initHandlers() {

@@ -47,6 +47,9 @@ class Join extends React.Component {
 
 	render() {
 		if(this.props.room.joinLoaded && !this.props.room.joinError.status) {
+			this.props.socket.emit("getAllRooms", {
+				uid: this.props.user.user.uid
+			});
 			return <Redirect to={`/room/${this.state.room}`}/>;
 		}	
 		
@@ -85,7 +88,8 @@ class Join extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		room: state.room
+		room: state.room,
+		user: state.user
 	};
 };
 

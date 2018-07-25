@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import socket_io from 'socket.io-client';
 import { verifyRoom, returnToDefaultVerifyRoom, updateOnlineUsersList, pushMessage, getAllMessages, returnToDefaultMessages, activeCLIMode, disableCLIMode, executeCLICommand, returnAddedCLI } from '../../actions/roomActions';
 import Message from '../Message/Message.jsx';

@@ -25,9 +25,10 @@ import MessageController from './controllers/message.controller';
 
 // socket.io chat controller
 import Chat from './socket/Chat';
+import User from './socket/User';
 
 // it will be chat instance
-let chat;
+let chatSocket, userSocket;
 
 // init server
 const app = express();
@@ -74,9 +75,8 @@ const server = http.createServer(app);
 const io = socket_io.listen(server);
 
 io.on("connection", socket => {
-	
-	chat = new Chat(io, socket, db);
-
+	chatSocket = new Chat(io, socket, db);
+	userSocket = new User(io, socket, db);
 });
 
 // start server

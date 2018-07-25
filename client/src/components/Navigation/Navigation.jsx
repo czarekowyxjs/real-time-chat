@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { changeAvatar } from '../../actions/userActions';
+import { changeAvatar, updateRoomsList } from '../../actions/userActions';
 import ProfileBoxNav from '../ProfileBoxNav/ProfileBoxNav.jsx';
+import RoomsPreview from '../RoomsPreview/RoomsPreview.jsx';
  
 import "./Navigation.css";
 
@@ -22,6 +23,9 @@ class Navigation extends React.Component {
 		const ProfileBoxNavMethods = {
 			changeAvatar: this.props.changeAvatar
 		};
+		const RoomsPreviewMethods = {
+			updateRoomsList: this.props.updateRoomsList
+		};
 		
 		return (
 			<div id="nav-bar">
@@ -31,6 +35,13 @@ class Navigation extends React.Component {
 						<p>version 0.1.0</p>
 					</div>
 					<ProfileBoxNav user={user} methods={ProfileBoxNavMethods}/>
+					<RoomsPreview user={user} rooms={this.props.user.rooms} methods={RoomsPreviewMethods} socket={this.props.socket}/>
+					<div className="nav-copy">
+						<a href="https://github.com/czarekowyxjs/real-time-chat" target="_BLANK" title="Cezary Góralski" rel="noopener noreferrer">
+							<img src="/public/images/github-logo.svg" alt="github logo"/>
+							<p>czarekowyxjs</p>
+						</a>
+					</div>
 				</div>
 				<div className="nav-bar-footer">
 					<div className="nav-bar-logout">
@@ -49,4 +60,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default connect(mapStateToProps, { changeAvatar })(Navigation);
+export default connect(mapStateToProps, { changeAvatar, updateRoomsList })(Navigation);

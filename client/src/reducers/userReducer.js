@@ -1,5 +1,6 @@
 const initialState = {
 	user: {},
+	rooms: [],
 	avatarError: {}
 };
 
@@ -23,7 +24,12 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				avatarError: action.error
-			}
+			};
+		case "UPDATE_USER_ROOMS_LIST":
+			return {
+				...state,
+				rooms: action.rooms
+			};
 		case "RETURN_TO_INITIAL_STATE_USER":
 			return initialState;
 		default:

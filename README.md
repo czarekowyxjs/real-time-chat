@@ -55,6 +55,7 @@ $ npm start
 
 ## Features
 * User authentication, login, register
+* Store users, messages, rooms etc. in db
 * Create and join to rooms
 * Password to room
 * Visible active users in room

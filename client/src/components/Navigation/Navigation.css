@@ -62,3 +62,35 @@
 	font-weight:600;
 	color:#fbfbfb;
 }
+
+.nav-copy {
+	margin:12px 0px;
+	width:100%;
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	justify-content:center;
+}
+
+.nav-copy > a {
+	text-decoration:none;
+	display:flex;
+	flex-direction:row;
+	align-items:center;
+	opacity:0.5;
+	transition-duration:200ms;
+}
+
+.nav-copy > a:hover {
+	opacity:1;
+}
+
+.nav-copy > a > p {
+	color:#fbfbfb;
+	font-size:0.85rem;
+	margin-left:5px;
+}
+
+.nav-copy > a > img {
+	width:22px;
+}

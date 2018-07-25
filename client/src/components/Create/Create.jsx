@@ -37,6 +37,9 @@ class Create extends React.Component {
 
 	render() {
 		if(this.props.room.createLoaded && !this.props.room.createError.status) {
+			this.props.socket.emit("getAllRooms", {
+				uid: this.props.user.user.uid
+			});
 			return <Redirect to={`/room/${this.props.room.tmpRid}`}/>;
 		}
 		
@@ -86,7 +89,8 @@ class Create extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		room: state.room
+		room: state.room,
+		user: state.user
 	};
 };
 
