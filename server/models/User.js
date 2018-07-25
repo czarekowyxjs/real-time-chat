@@ -23,6 +23,10 @@ const User = db.define('User', {
 		type: Sequelize.STRING(999),
 		field: 'password'
 	},
+	avatar: {
+		type: Sequelize.STRING(255),
+		field: 'avatar'
+	},
 	_createdAt: {
 		type: Sequelize.STRING(99),
 		field: '_createdAt'

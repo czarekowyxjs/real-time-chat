@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import FormatAvatarUrl from '../../helpers/FormatAvatarUrl';
+import { changeAvatar } from '../../actions/userActions';
+import ProfileBoxNav from '../ProfileBoxNav/ProfileBoxNav.jsx';
  
 import "./Navigation.css";
 
@@ -18,6 +19,10 @@ class Navigation extends React.Component {
 
 	render() {
 		const user = this.props.user.user;
+		const ProfileBoxNavMethods = {
+			changeAvatar: this.props.changeAvatar
+		};
+		
 		return (
 			<div id="nav-bar">
 				<div className="nav-bar-body">
@@ -25,12 +30,7 @@ class Navigation extends React.Component {
 						<h1><Link to="/">Real time chat</Link></h1>
 						<p>version 0.1.0</p>
 					</div>
-					<div className="profile-box">
-						<Link to={`/account/${user.uid}`}>
-							<img src={FormatAvatarUrl(user.avatar, user.uid)} alt={user.username}/>
-							<p>{user.username}</p>
-						</Link>
-					</div>
+					<ProfileBoxNav user={user} methods={ProfileBoxNavMethods}/>
 				</div>
 				<div className="nav-bar-footer">
 					<div className="nav-bar-logout">
@@ -49,4 +49,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default connect(mapStateToProps)(Navigation);
+export default connect(mapStateToProps, { changeAvatar })(Navigation);
