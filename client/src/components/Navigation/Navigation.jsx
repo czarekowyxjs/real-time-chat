@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import FormatAvatarUrl from '../../helpers/FormatAvatarUrl';
  
 import "./Navigation.css";
 
@@ -26,7 +27,7 @@ class Navigation extends React.Component {
 					</div>
 					<div className="profile-box">
 						<Link to={`/account/${user.uid}`}>
-							<img src="/public/images/default-avatar.png" alt={user.username}/>
+							<img src={FormatAvatarUrl(user.avatar, user.uid)} alt={user.username}/>
 							<p>{user.username}</p>
 						</Link>
 					</div>

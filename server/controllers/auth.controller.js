@@ -176,9 +176,7 @@ router.route("/authorization")
 
 	db.User
 	.findOne({
-		attributes: {
-			exclude: ['password']
-		},
+		attributes: ['uid', 'username', 'email', 'avatar'],
 		include: [{
 			model: db.Token,
 			where: {

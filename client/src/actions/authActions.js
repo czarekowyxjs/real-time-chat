@@ -20,7 +20,7 @@ export const userRequireAuth = (token) => {
 
 				let user = response.data.user;
 				delete user.Token;
-
+				console.log(user);
 				dispatch({
 					type: "FETCH_USER_DATA",
 					user: response.data.user
