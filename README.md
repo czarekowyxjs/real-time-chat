@@ -1,6 +1,6 @@
 # real-time-chat
 
-![real time chat images](https://i.imgur.com/8XegiET.gif)
+![real time chat images](https://i.imgur.com/6LfrGyB.gif)
 
 #### Table of contents
 * [How to run this app?](#how-to-run)
